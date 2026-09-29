@@ -10,6 +10,17 @@ import { latestRelease, formatDate } from '../lib/release';
 
 const r = await latestRelease();
 
+const plain = (html: string) => html.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&');
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: plain(f.a) },
+  })),
+};
+
 const useCases = [
   { icon: '🤖', title: 'AI coding agents', text: 'Let Claude Code, Codex, or Cursor run for an hour without a stray keystroke landing in the prompt.' },
   { icon: '🏗️', title: 'Builds, tests & training', text: 'Watch long builds, test suites, and ML runs finish with nobody poking at the keyboard.' },
@@ -39,7 +50,12 @@ const compare = [
   ['Auto-locks when you walk away', true, true],
 ];
 ---
-<Base>
+<Base
+  exactTitle
+  title="Wardlume: lock your Mac's keyboard & mouse while AI agents run"
+  description="Wardlume is a free macOS app that locks your keyboard, mouse, and trackpad behind a glass shield while Claude Code, Codex, or Cursor keep working in full view. Unlock with Touch ID or Apple Watch."
+  jsonLd={[faqLd]}
+>
   <!-- Hero -->
   <section class="hero">
     <div class="glow" aria-hidden="true"></div>
@@ -47,6 +63,7 @@ const compare = [
       <a class="pill" href="/changelog">
         <span class="new">New</span> v{r.version}: Apple Watch unlock &amp; auto-ward <span aria-hidden="true">→</span>
       </a>
+      <p class="brandline">Wardlume for macOS</p>
       <h1>Lock the input.<br /><span class="grad">Keep the work in view.</span></h1>
       <p class="lead">
         <b>Wardlume</b> casts a glass ward over your Mac so you can <b>botsit</b>: leave your AI agents running while you step away.
@@ -227,6 +244,7 @@ const compare = [
 </Base>
 
 <style>
+  .brandline { font-weight: 700; font-size: 1.05rem; letter-spacing: 0.01em; color: var(--muted); margin: 0 0 12px; }
   .hero { position: relative; padding: 72px 0 40px; overflow: hidden; }
   .glow {
     position: absolute; inset: -20% -10% auto; height: 720px; pointer-events: none;

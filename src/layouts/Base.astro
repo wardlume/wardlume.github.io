@@ -10,14 +10,23 @@ interface Props {
   description?: string;
   image?: string;
   article?: boolean;
+  /** Use `title` verbatim, without the " · Wardlume" suffix. */
+  exactTitle?: boolean;
+  /** Extra JSON-LD objects for this page (e.g. FAQPage). */
+  jsonLd?: object[];
 }
-const { title, description = site.description, image = '/og.png', article = false } = Astro.props;
-const fullTitle = title ? `${title} · ${site.name}` : `${site.name} — ${site.tagline.replace(/\.$/, '')}`;
-const canonical = new URL(Astro.url.pathname, site.url).href;
+const { title, description = site.description, image = '/og.png', article = false, exactTitle = false, jsonLd: extraLd = [] } = Astro.props;
+const fullTitle = title
+  ? (exactTitle ? title : `${title} · ${site.name}`)
+  : `${site.name} — ${site.tagline.replace(/\.$/, '')}`;
+// Pages are built as /download.html but served (and listed in the sitemap) as /download.
+const path = Astro.url.pathname.replace(/(index)?\.html$/, '').replace(/(.)\/$/, '$1');
+const canonical = new URL(path, site.url).href;
 const ogImage = new URL(image, site.url).href;
 const release = await latestRelease();
+const abs = (p: string) => new URL(p, site.url).href;
 
-const jsonLd = {
+const appLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
   name: site.name,
@@ -29,7 +38,25 @@ const jsonLd = {
   softwareVersion: release.version,
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
   author: { '@type': 'Person', name: site.author },
+  image: abs('/img/icon-512.png'),
+  screenshot: abs('/og.png'),
 };
+const siteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: site.name,
+  alternateName: ['Wardlume for macOS', 'Wardlume Mac app'],
+  url: abs('/'),
+};
+const orgLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: site.name,
+  url: abs('/'),
+  logo: abs('/img/icon-512.png'),
+  sameAs: [site.links.github, 'https://github.com/wardlume'],
+};
+const jsonLd = [appLd, siteLd, orgLd, ...extraLd];
 ---
 <!doctype html>
 <html lang="en">
@@ -40,6 +67,11 @@ const jsonLd = {
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content="#0a1310" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta name="application-name" content={site.name} />
+    <meta name="apple-mobile-web-app-title" content={site.name} />
+    {site.verification.google && <meta name="google-site-verification" content={site.verification.google} />}
+    {site.verification.bing && <meta name="msvalidate.01" content={site.verification.bing} />}
     <link rel="icon" type="image/png" href="/favicon-64.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />

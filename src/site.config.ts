@@ -36,6 +36,12 @@ export const site = {
   // Leave empty to hide. Shown on Support and Pricing.
   contactEmail: '',
 
+  // Search engine ownership tokens (Google Search Console / Bing Webmaster Tools).
+  // Paste the content="…" value of each verification meta tag here.
+  verification: { google: '', bing: '' },
+  // IndexNow (Bing, Yandex, Seznam…): public/<key>.txt holds the same value.
+  indexNowKey: '52e7367371f04df9bed7960be2121664',
+
   // Cookieless analytics. Leave empty for none (the default).
   // e.g. goatcounter: 'wardlume' → https://wardlume.goatcounter.com
   analytics: { goatcounter: '' },
