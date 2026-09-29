@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { pricing, site } from '../site.config';
+import Email from '../components/Email.astro';
 const free = pricing.mode === 'free';
 ---
 <Base title="Pricing" description="Wardlume is free for personal and other noncommercial use. Sponsor its development, or ask about a commercial license.">
@@ -54,7 +55,8 @@ const free = pricing.mode === 'free';
             <li>Priority help</li>
             <li>Invoice on request</li>
           </ul>
-          <a class="btn btn-ghost" href={site.contactEmail ? `mailto:${site.contactEmail}?subject=Wardlume%20commercial%20license` : pricing.commercial.href}>Get notified</a>
+          <p class="small ask">Interested? Email me at <Email subject="Wardlume commercial license" /> and I’ll get back to you.</p>
+          <Email subject="Wardlume commercial license" label="✉️ Email me" class="btn btn-ghost" />
         </div>
       </div>
     ) : (
@@ -89,7 +91,9 @@ const free = pricing.mode === 'free';
   .plan li { margin: 6px 0; font-size: 0.93rem; }
   .plan li::marker { color: var(--accent); }
   .stack { display: grid; gap: 8px; }
-  .soon ul { opacity: 0.7; }
+  .soon ul { opacity: 0.7; margin-bottom: 12px; }
+  .ask { margin: 0 0 14px; color: var(--muted); }
+  .ask :global(a) { font-weight: 600; white-space: nowrap; }
   .badge {
     font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; vertical-align: middle; margin-left: 6px;
     padding: 3px 8px; border-radius: 999px; color: var(--warn); border: 1px solid color-mix(in srgb, var(--warn) 45%, transparent);

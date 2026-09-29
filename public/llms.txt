@@ -11,7 +11,7 @@
 - [Download](https://wardlume.github.io/download): latest version, install methods, checksums
 - [Docs](https://wardlume.github.io/docs): setup, permissions, unlocking, automation, displays, reactions
 - [Safety guide](https://wardlume.github.io/safety): every way out, what the ward blocks
-- [Support](https://wardlume.github.io/support): troubleshooting and contact
+- [Support & contact](https://wardlume.github.io/support): troubleshooting; email for licensing, press, and private questions ([contact](https://wardlume.github.io/support#contact))
 - [Pricing](https://wardlume.github.io/pricing): free for personal use; commercial licensing
 - [Changelog](https://wardlume.github.io/changelog) · [Roadmap](https://wardlume.github.io/roadmap)
 - [Privacy](https://wardlume.github.io/privacy) · [Terms](https://wardlume.github.io/terms)

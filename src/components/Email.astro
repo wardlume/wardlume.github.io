@@ -1,0 +1,26 @@
+---
+// The contact email as a mailto link, assembled in the browser so simple
+// scrapers don't harvest it from the HTML. Without JS it reads "name (at) domain".
+import { site } from '../site.config';
+interface Props {
+  subject?: string;
+  /** Show this text (e.g. "Email me") instead of the address; renders as a button. */
+  label?: string;
+  class?: string;
+}
+const { subject = '', label, class: cls = '' } = Astro.props;
+const [user, domain] = site.contactEmail.split('@');
+---
+{site.contactEmail && (
+  <a class:list={['js-email', cls]} data-u={user} data-d={domain} data-s={subject} data-label={label ?? ''} href="/support#contact">
+    {label ?? `${user} (at) ${domain}`}
+  </a>
+)}
+
+<script>
+  for (const a of document.querySelectorAll<HTMLAnchorElement>('a.js-email')) {
+    const addr = `${a.dataset.u}@${a.dataset.d}`;
+    a.href = `mailto:${addr}` + (a.dataset.s ? `?subject=${encodeURIComponent(a.dataset.s)}` : '');
+    if (!a.dataset.label) a.textContent = addr;
+  }
+</script>

@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import FAQ from '../components/FAQ.astro';
 import Cmd from '../components/Cmd.astro';
+import Email from '../components/Email.astro';
 import { site } from '../site.config';
 import { faq } from '../lib/faq';
 
@@ -32,35 +33,38 @@ const fixes = [
   },
 ];
 ---
-<Base title="Support" description="Get help with Wardlume: fixes for common issues, the FAQ, and how to reach the developer.">
+<Base title="Support & contact" description="Get help with Wardlume or get in touch: fixes for common issues, the FAQ, and email for licensing, press, and private questions.">
   <div class="container page">
     <header class="intro">
-      <span class="eyebrow">Support</span>
+      <span class="eyebrow">Support &amp; contact</span>
       <h1>How can we help?</h1>
-      <p class="lead">Wardlume is built by one developer, and that person reads every issue and discussion. Expect a human reply, not a ticket number.</p>
+      <p class="lead">Wardlume is built by one developer, and that person reads every message. Expect a human reply, not a ticket number.</p>
     </header>
 
-    <div class="grid grid-3 channels">
-      <a class="card channel" href={site.links.issues}>
-        <span class="ico">🐛</span><h3>Report a bug</h3>
-        <p class="muted small">Something broken? Open a GitHub issue. Include your macOS version and Wardlume version (menu bar → Settings → Overview).</p>
-      </a>
-      <a class="card channel" href={site.links.discussions}>
-        <span class="ico">💬</span><h3>Ask a question</h3>
-        <p class="muted small">How-tos, ideas, and feature requests live in GitHub Discussions, where answers help the next person too.</p>
-      </a>
-      {site.contactEmail ? (
-        <a class="card channel" href={`mailto:${site.contactEmail}`}>
-          <span class="ico">✉️</span><h3>Email</h3>
-          <p class="muted small">{site.contactEmail}. For licensing and anything private.</p>
+    <section id="contact" class="contact">
+      <h2>Get in touch</h2>
+      <div class="grid grid-3 channels">
+        {site.contactEmail && (
+          <div class="card channel biz">
+            <span class="ico">💼</span><h3>Business &amp; licensing</h3>
+            <p class="muted small">Commercial licenses, press, partnerships, or anything private. No GitHub account needed.</p>
+            <Email subject="Wardlume" class="addr" />
+            <p class="faint small">I usually reply within 2–3 business days.</p>
+          </div>
+        )}
+        <a class="card channel" href={site.links.issues}>
+          <span class="ico">🐛</span><h3>Report a bug</h3>
+          <p class="muted small">Something broken? Open a GitHub issue. Include your macOS version and Wardlume version (menu bar → Settings → Overview).</p>
+          <span class="go small">Open an issue →</span>
         </a>
-      ) : (
-        <a class="card channel" href="/docs">
-          <span class="ico">📘</span><h3>Read the docs</h3>
-          <p class="muted small">Step-by-step guides for setup, unlocking, automation, displays, and reactions.</p>
+        <a class="card channel" href={site.links.discussions}>
+          <span class="ico">💬</span><h3>Questions &amp; ideas</h3>
+          <p class="muted small">How-tos and feature requests live in GitHub Discussions, where answers help the next person too. No GitHub? Just email.</p>
+          <span class="go small">Start a discussion →</span>
         </a>
-      )}
-    </div>
+      </div>
+      <p class="small muted docs-hint">Looking for how-tos? The <a href="/docs">docs</a> cover setup, unlocking, automation, displays, and reactions.</p>
+    </section>
 
     <section class="section-sm">
       <h2>Before you write in</h2>
@@ -89,7 +93,15 @@ const fixes = [
   .intro { max-width: 720px; margin-bottom: 36px; }
   .channel { color: var(--text); transition: border-color 0.15s, transform 0.15s; }
   .channel:hover { text-decoration: none; border-color: var(--accent); transform: translateY(-2px); }
-  .channel p { margin: 0; }
+  .channel p { margin: 0 0 12px; }
+  .channel { display: flex; flex-direction: column; }
+  .channel .go { margin-top: auto; color: var(--accent-2); font-weight: 600; }
+  .biz { border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); }
+  .biz :global(.addr) { font-weight: 700; font-size: 1rem; word-break: break-all; margin-bottom: 8px; }
+  .faint { color: var(--faint); margin: 0 !important; }
+  .contact { scroll-margin-top: 88px; }
+  .contact h2 { font-size: 1.5rem; margin-bottom: 16px; }
+  .docs-hint { margin-top: 16px; }
   .ico { font-size: 1.6rem; display: block; margin-bottom: 10px; }
   .fixes { display: grid; gap: 12px; margin-top: 20px; }
   @media (min-width: 860px) { .fixes { grid-template-columns: 1fr 1fr; } }

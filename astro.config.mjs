@@ -9,6 +9,7 @@ export default defineConfig({
   // download.html is served at /download on GitHub Pages: no trailing-slash redirects.
   build: { format: 'file' },
   devToolbar: { enabled: false },
+  redirects: { '/contact': '/support#contact' },
   integrations: [sitemap()],
   markdown: {
     shikiConfig: { theme: 'github-dark' },
