@@ -38,7 +38,7 @@ export const site = {
 
   // Search engine ownership tokens (Google Search Console / Bing Webmaster Tools).
   // Paste the content="…" value of each verification meta tag here.
-  verification: { google: '', bing: '' },
+  verification: { google: 'TYYKYcZFc7BVzrRpWoQtXpr_djAfHCMSFfRJ9rlpDao', bing: '' },
   // IndexNow (Bing, Yandex, Seznam…): public/<key>.txt holds the same value.
   indexNowKey: '52e7367371f04df9bed7960be2121664',
 
