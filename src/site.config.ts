@@ -34,7 +34,7 @@ export const site = {
   },
 
   // Leave empty to hide. Shown on Support and Pricing.
-  contactEmail: '',
+  contactEmail: 'workwithvinshu@gmail.com',
 
   // Search engine ownership tokens (Google Search Console / Bing Webmaster Tools).
   // Paste the content="…" value of each verification meta tag here.

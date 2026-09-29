@@ -6,6 +6,7 @@ const nav = [
   { href: '/docs', label: 'Docs' },
   { href: '/pricing', label: 'Pricing' },
   { href: '/support', label: 'Support' },
+  { href: '/roadmap', label: 'Roadmap' },
   { href: '/changelog', label: 'Changelog' },
 ];
 const active = (href: string) => href !== '/#features' && path.startsWith(href);
@@ -89,7 +90,7 @@ const active = (href: string) => href !== '/#features' && path.startsWith(href);
   .mobile ul { padding-top: 8px; padding-bottom: 12px; }
   .mobile a { display: block; padding: 10px 0; color: var(--text); font-weight: 500; }
   @media (max-width: 480px) { .gh { display: none; } }
-  @media (min-width: 860px) {
+  @media (min-width: 980px) {
     .bar nav { display: block; }
     .menu { display: none; }
     .mobile { display: none; }

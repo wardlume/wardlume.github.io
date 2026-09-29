@@ -45,16 +45,16 @@ const free = pricing.mode === 'free';
             {pricing.donate.map((d, i) => <a class={`btn ${i === 0 ? 'btn-primary' : 'btn-ghost'}`} href={d.href}>💚 {d.label}</a>)}
           </div>
         </div>
-        <div class="card plan">
-          <h2>Commercial</h2>
-          <p class="price">Contact</p>
-          <p class="muted small">Using Wardlume at work for a company, or bundling it into a paid product or service.</p>
+        <div class="card plan soon">
+          <h2>Commercial <span class="badge">Coming soon</span></h2>
+          <p class="price">Coming soon</p>
+          <p class="muted small">For using Wardlume at work for a company, or bundling it into a paid product or service.</p>
           <ul>
             <li>License for your team</li>
             <li>Priority help</li>
             <li>Invoice on request</li>
           </ul>
-          <a class="btn btn-ghost" href={site.contactEmail ? `mailto:${site.contactEmail}?subject=Wardlume%20commercial%20license` : pricing.commercial.href}>{pricing.commercial.label}</a>
+          <a class="btn btn-ghost" href={site.contactEmail ? `mailto:${site.contactEmail}?subject=Wardlume%20commercial%20license` : pricing.commercial.href}>Get notified</a>
         </div>
       </div>
     ) : (
@@ -89,5 +89,10 @@ const free = pricing.mode === 'free';
   .plan li { margin: 6px 0; font-size: 0.93rem; }
   .plan li::marker { color: var(--accent); }
   .stack { display: grid; gap: 8px; }
+  .soon ul { opacity: 0.7; }
+  .badge {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; vertical-align: middle; margin-left: 6px;
+    padding: 3px 8px; border-radius: 999px; color: var(--warn); border: 1px solid color-mix(in srgb, var(--warn) 45%, transparent);
+  }
   .fine { margin-top: 36px; }
 </style>

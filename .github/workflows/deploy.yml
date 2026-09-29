@@ -4,8 +4,8 @@ on:
   push:
     branches: [main]
   schedule:
-    - cron: '17 3 * * *'   # daily: pick up new releases and doc changes
-  workflow_dispatch:        # gh workflow run deploy.yml -R wardlume/wardlume.github.io
+    - cron: '7 * * * *'   # hourly: redeploy only if a new release or doc change landed
+  workflow_dispatch:       # gh workflow run deploy.yml -R wardlume/wardlume.github.io
 
 permissions:
   contents: read
@@ -14,10 +14,33 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
+  # Scheduled runs: compare what's live with GitHub. Push/manual runs always build.
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.cmp.outputs.changed }}
+    steps:
+      - id: cmp
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "${{ github.event_name }}" != "schedule" ]; then echo "changed=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+          live="$(curl -fsSL https://wardlume.github.io/version.json || echo '{}')"
+          release="$(gh api repos/arpitagarwal1301/wardlume/releases/latest -q .tag_name)"
+          docs="$(gh api repos/arpitagarwal1301/wardlume/commits/main -q .sha)"
+          echo "live: $live"; echo "github: release=$release docs=$docs"
+          if [ "$(jq -r .release <<<"$live")" = "$release" ] && [ "$(jq -r .docs <<<"$live")" = "$docs" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"; echo "Up to date."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"; echo "New release or docs: rebuilding."
+          fi
+
   build:
+    needs: check
+    if: needs.check.outputs.changed == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -44,10 +67,9 @@ jobs:
       - id: deployment
         uses: actions/deploy-pages@v4
 
-  # Ping search engines only when content changed (not on the daily rebuild).
+  # Tell IndexNow search engines (Bing & co.) the pages changed.
   indexnow:
     needs: deploy
-    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5

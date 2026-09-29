@@ -13,6 +13,6 @@
 - [Safety guide](https://wardlume.github.io/safety): every way out, what the ward blocks
 - [Support](https://wardlume.github.io/support): troubleshooting and contact
 - [Pricing](https://wardlume.github.io/pricing): free for personal use; commercial licensing
-- [Changelog](https://wardlume.github.io/changelog)
+- [Changelog](https://wardlume.github.io/changelog) · [Roadmap](https://wardlume.github.io/roadmap)
 - [Privacy](https://wardlume.github.io/privacy) · [Terms](https://wardlume.github.io/terms)
 - [GitHub](https://github.com/arpitagarwal1301/wardlume): releases, issues, discussions
