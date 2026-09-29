@@ -1,5 +1,5 @@
 ---
-title: 'Botsitting: leave your AI agent running without leaving your Mac open'
+title: 'Botsitting: run AI agents without leaving your Mac open'
 description: Why locking the screen is the wrong tool when an agent is mid-task, and what Wardlume does instead.
 date: 2026-09-29
 ---

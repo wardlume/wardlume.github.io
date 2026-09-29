@@ -7,7 +7,7 @@ export const site = {
   tagline: 'Cast a watching ward over your Mac.',
   subtitle: 'See your AI agents work. Intruders can’t.',
   description:
-    'Wardlume locks your Mac’s keyboard, mouse, and trackpad behind an animated glass shield while Claude Code, Codex, or Cursor keep working in full view. Unlock with Touch ID or Apple Watch. Free for personal use.',
+    "Wardlume locks your Mac's keyboard, mouse and trackpad behind a glass shield while AI agents keep working in view. Unlock with Touch ID. Free for personal use.",
   author: 'Arpit Agarwal',
   requirements: 'macOS Tahoe 26+ · Apple Silicon',
 

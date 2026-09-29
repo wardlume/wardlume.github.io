@@ -14,8 +14,10 @@ interface Props {
   exactTitle?: boolean;
   /** Extra JSON-LD objects for this page (e.g. FAQPage). */
   jsonLd?: object[];
+  /** Keep this page out of search results (404). */
+  noindex?: boolean;
 }
-const { title, description = site.description, image = '/og.png', article = false, exactTitle = false, jsonLd: extraLd = [] } = Astro.props;
+const { title, description = site.description, image = '/og.png', article = false, exactTitle = false, jsonLd: extraLd = [], noindex = false } = Astro.props;
 const fullTitle = title
   ? (exactTitle ? title : `${title} · ${site.name}`)
   : `${site.name} — ${site.tagline.replace(/\.$/, '')}`;
@@ -67,7 +69,7 @@ const jsonLd = [appLd, siteLd, orgLd, ...extraLd];
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content="#f5f8f6" />
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
     <meta name="application-name" content={site.name} />
     <meta name="apple-mobile-web-app-title" content={site.name} />
     {site.verification.google && <meta name="google-site-verification" content={site.verification.google} />}
