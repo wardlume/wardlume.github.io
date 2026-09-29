@@ -1,0 +1,61 @@
+---
+import { site } from '../site.config';
+const year = new Date().getFullYear();
+const cols = [
+  { title: 'Product', links: [
+    { href: '/download', label: 'Download' },
+    { href: '/#features', label: 'Features' },
+    { href: '/pricing', label: 'Pricing' },
+    { href: '/changelog', label: 'Changelog' },
+  ]},
+  { title: 'Help', links: [
+    { href: '/docs', label: 'Docs' },
+    { href: '/support', label: 'Support' },
+    { href: '/safety', label: 'Safety guide' },
+    { href: site.links.discussions, label: 'Discussions' },
+  ]},
+  { title: 'More', links: [
+    { href: '/blog', label: 'Blog' },
+    { href: site.links.github, label: 'GitHub' },
+    { href: site.links.permissionPilot, label: 'PermissionPilot' },
+    { href: 'https://github.com/sponsors/arpitagarwal1301', label: 'Sponsor' },
+  ]},
+  { title: 'Legal', links: [
+    { href: '/privacy', label: 'Privacy' },
+    { href: '/terms', label: 'Terms' },
+    { href: `https://github.com/${site.repo}/blob/main/LICENSE`, label: 'License' },
+  ]},
+];
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="top">
+      <div class="about">
+        <a class="brand" href="/"><img src="/img/icon-512.png" alt="" width="26" height="26" /> {site.name}</a>
+        <p class="muted small">A botsitting ward for your Mac. Local-only: no servers, no analytics, no accounts in the app.</p>
+      </div>
+      {cols.map((c) => (
+        <div>
+          <h4>{c.title}</h4>
+          <ul>{c.links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
+        </div>
+      ))}
+    </div>
+    <p class="bottom small">© {year} {site.author} · Built with 🪄 for every Mac running AI agents at coffee shops worldwide.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer { border-top: 1px solid var(--border); padding: 56px 0 32px; margin-top: 40px; background: var(--bg-2); }
+  .top { display: grid; gap: 32px; grid-template-columns: repeat(2, 1fr); }
+  .about { grid-column: 1 / -1; max-width: 320px; }
+  @media (min-width: 860px) { .top { grid-template-columns: 1.6fr repeat(4, 1fr); } .about { grid-column: auto; } }
+  .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--text); font-weight: 700; margin-bottom: 10px; }
+  .brand img { border-radius: 6px; }
+  h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--faint); margin: 0 0 12px; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li { margin: 6px 0; }
+  li a { color: var(--muted); font-size: 0.93rem; }
+  li a:hover { color: var(--text); }
+  .bottom { color: var(--faint); margin: 40px 0 0; padding-top: 20px; border-top: 1px solid var(--border); }
+</style>

@@ -1,0 +1,100 @@
+---
+import Base from '../layouts/Base.astro';
+import FAQ from '../components/FAQ.astro';
+import Cmd from '../components/Cmd.astro';
+import { site } from '../site.config';
+import { faq } from '../lib/faq';
+
+const fixes = [
+  {
+    t: 'The setup window opens instead of the ward',
+    d: 'Wardlume won’t cast a ward while a permission is missing, so it reopens the guided setup instead. macOS sometimes revokes permissions after an update: re-grant them in the setup window (or <b>System Settings → Privacy &amp; Security</b>), then use <b>Quit &amp; Reopen</b> when asked.',
+    link: { href: '/docs/permissions', label: 'Permissions guide' },
+  },
+  {
+    t: 'I’m stuck behind the ward',
+    d: 'Press your unlock shortcut (<kbd>⌘</kbd><kbd>⇧</kbd><kbd>U</kbd> by default) and use Touch ID or your password. As a last resort, <kbd>⌘</kbd><kbd>⌥</kbd><kbd>Esc</kbd> → Force Quit Wardlume always works; macOS reserves it.',
+    link: { href: '/safety', label: 'Safety guide' },
+  },
+  {
+    t: 'Apple Watch unlock doesn’t work',
+    d: 'Your watch must be on your wrist, unlocked, signed in to the same Apple Account, and enabled in <b>System Settings → Touch ID &amp; Password</b>. Then use <b>Settings → Lock &amp; unlock → Send test to watch</b>.',
+    link: { href: '/docs/unlocking', label: 'Unlocking guide' },
+  },
+  {
+    t: 'macOS says “Wardlume is damaged”',
+    d: 'It isn’t; unnotarized downloads are quarantined. Install with Homebrew instead, or clear the flag once:',
+    cmd: 'xattr -dr com.apple.quarantine /Applications/Wardlume.app',
+  },
+  {
+    t: 'A “Ward Deactivated” alert appeared',
+    d: 'Screen capture stopped while you were away, almost always because Screen Recording was turned off. Wardlume drops the ward rather than leave you behind a frozen image. Re-enable it in <b>System Settings → Privacy &amp; Security → Screen Recording</b> and cast the ward again.',
+  },
+];
+---
+<Base title="Support" description="Get help with Wardlume: fixes for common issues, the FAQ, and how to reach the developer.">
+  <div class="container page">
+    <header class="intro">
+      <span class="eyebrow">Support</span>
+      <h1>How can we help?</h1>
+      <p class="lead">Wardlume is built by one developer, and that person reads every issue and discussion. Expect a human reply, not a ticket number.</p>
+    </header>
+
+    <div class="grid grid-3 channels">
+      <a class="card channel" href={site.links.issues}>
+        <span class="ico">🐛</span><h3>Report a bug</h3>
+        <p class="muted small">Something broken? Open a GitHub issue. Include your macOS version and Wardlume version (menu bar → Settings → Overview).</p>
+      </a>
+      <a class="card channel" href={site.links.discussions}>
+        <span class="ico">💬</span><h3>Ask a question</h3>
+        <p class="muted small">How-tos, ideas, and feature requests live in GitHub Discussions, where answers help the next person too.</p>
+      </a>
+      {site.contactEmail ? (
+        <a class="card channel" href={`mailto:${site.contactEmail}`}>
+          <span class="ico">✉️</span><h3>Email</h3>
+          <p class="muted small">{site.contactEmail}. For licensing and anything private.</p>
+        </a>
+      ) : (
+        <a class="card channel" href="/docs">
+          <span class="ico">📘</span><h3>Read the docs</h3>
+          <p class="muted small">Step-by-step guides for setup, unlocking, automation, displays, and reactions.</p>
+        </a>
+      )}
+    </div>
+
+    <section class="section-sm">
+      <h2>Before you write in</h2>
+      <p class="muted">These fix most problems.</p>
+      <div class="fixes">
+        {fixes.map((f) => (
+          <div class="card fix">
+            <h3>{f.t}</h3>
+            <p class="muted small" set:html={f.d} />
+            {f.cmd && <Cmd lines={f.cmd} />}
+            {f.link && <a class="small" href={f.link.href}>{f.link.label} →</a>}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="section-sm">
+      <h2 class="center">Frequently asked</h2>
+      <div class="mt"><FAQ items={faq} /></div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .page { padding-top: 56px; padding-bottom: 40px; }
+  .intro { max-width: 720px; margin-bottom: 36px; }
+  .channel { color: var(--text); transition: border-color 0.15s, transform 0.15s; }
+  .channel:hover { text-decoration: none; border-color: var(--accent); transform: translateY(-2px); }
+  .channel p { margin: 0; }
+  .ico { font-size: 1.6rem; display: block; margin-bottom: 10px; }
+  .fixes { display: grid; gap: 12px; margin-top: 20px; }
+  @media (min-width: 860px) { .fixes { grid-template-columns: 1fr 1fr; } }
+  .fix h3 { margin-bottom: 6px; }
+  .fix p { margin-bottom: 10px; }
+  .fix :global(.cmd) { margin-bottom: 4px; }
+  .mt { margin-top: 24px; }
+</style>

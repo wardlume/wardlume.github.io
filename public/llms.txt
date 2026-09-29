@@ -1,0 +1,18 @@
+# Wardlume
+
+> Wardlume is a free (for noncommercial use) macOS menu-bar app for "botsitting": it locks the keyboard, mouse, and trackpad behind an animated glass shield while the screen stays visible, so AI coding agents (Claude Code, Codex, Cursor) and other long-running work keep going in full view while you step away. Unlock with Touch ID, Apple Watch, or your password. Local-only: no network, analytics, or accounts.
+
+- Requirements: macOS Tahoe 26+, Apple Silicon
+- Install: `brew tap arpitagarwal1301/tap && brew trust arpitagarwal1301/tap && brew install --cask wardlume`
+- Default shortcuts: ⌘⇧L activate, ⌘⇧U unlock. ⌘⌥Esc (Force Quit) always works.
+
+## Pages
+- [Home](https://wardlume.github.io/): overview, features, FAQ
+- [Download](https://wardlume.github.io/download): latest version, install methods, checksums
+- [Docs](https://wardlume.github.io/docs): setup, permissions, unlocking, automation, displays, reactions
+- [Safety guide](https://wardlume.github.io/safety): every way out, what the ward blocks
+- [Support](https://wardlume.github.io/support): troubleshooting and contact
+- [Pricing](https://wardlume.github.io/pricing): free for personal use; commercial licensing
+- [Changelog](https://wardlume.github.io/changelog)
+- [Privacy](https://wardlume.github.io/privacy) · [Terms](https://wardlume.github.io/terms)
+- [GitHub](https://github.com/arpitagarwal1301/wardlume): releases, issues, discussions

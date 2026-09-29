@@ -1,0 +1,16 @@
+---
+import Prose from '../../layouts/Prose.astro';
+import { getCollection, render } from 'astro:content';
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', (p) => !p.data.draft);
+  return posts.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const date = entry.data.date.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<Prose title={entry.data.title} description={entry.data.description} eyebrow={date} article>
+  <Content />
+  <hr />
+  <p><a href="/download">Download Wardlume</a>. Free for personal use.</p>
+</Prose>

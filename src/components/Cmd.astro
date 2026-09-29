@@ -1,0 +1,10 @@
+---
+// A terminal command line with a copy button. `lines` may be one or several.
+interface Props { lines: string | readonly string[]; }
+const lines = ([] as string[]).concat(Astro.props.lines as any);
+const text = lines.join('\n');
+---
+<div class="cmd">
+  <pre>{lines.map((l, i) => <Fragment><span class="prompt">$ </span>{l}{i < lines.length - 1 ? '\n' : ''}</Fragment>)}</pre>
+  <button class="copy" type="button" data-copy={text} aria-label="Copy command">Copy</button>
+</div>

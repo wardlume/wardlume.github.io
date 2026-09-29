@@ -1,0 +1,90 @@
+---
+import Base from '../layouts/Base.astro';
+import InstallTabs from '../components/InstallTabs.astro';
+import Cmd from '../components/Cmd.astro';
+import { site } from '../site.config';
+import { latestRelease, formatDate, formatSize } from '../lib/release';
+const r = await latestRelease();
+const files = [r.pkg, r.dmg].filter(Boolean) as NonNullable<typeof r.pkg>[];
+---
+<Base title="Download" description={`Download Wardlume ${r.version} for macOS. Install with Homebrew, the .pkg installer, or the .dmg.`}>
+  <div class="container page">
+    <div class="head">
+      <img src="/img/icon-512.png" alt="Wardlume app icon" width="96" height="96" />
+      <div>
+        <span class="eyebrow">Download</span>
+        <h1>Wardlume {r.version !== 'latest' && r.version}</h1>
+        <p class="muted">{r.date && <>Released {formatDate(r.date)} · </>}{site.requirements} · <a href={r.notesUrl}>Release notes</a></p>
+      </div>
+    </div>
+
+    <div class="grid layout">
+      <section class="card">
+        <h2 class="h">Install</h2>
+        <InstallTabs />
+      </section>
+
+      <aside class="side">
+        <div class="card">
+          <h2 class="h">Files</h2>
+          {files.length ? (
+            <ul class="files">
+              {files.map((f) => (
+                <li>
+                  <a class="btn btn-ghost file" href={f.url}>⬇ {f.name} <span class="muted small">{formatSize(f.size)}</span></a>
+                  {f.sha256 && <details><summary class="small muted">SHA-256</summary><code class="sha">{f.sha256}</code></details>}
+                </li>
+              ))}
+            </ul>
+          ) : <p><a href={site.links.releases}>Get it from GitHub Releases →</a></p>}
+          <p class="small muted">All versions: <a href={site.links.releases}>GitHub Releases</a></p>
+        </div>
+
+        <div class="card">
+          <h2 class="h">Requirements</h2>
+          <ul class="plain small">
+            <li>macOS Tahoe 26 or later</li>
+            <li>Apple Silicon Mac</li>
+            <li>Touch ID or an Apple Watch recommended for unlocking (password works too)</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <section class="more grid grid-3">
+      <div class="card">
+        <h3>After installing</h3>
+        <p class="muted small">Open Wardlume from Applications. A guided setup asks for Screen Recording, Accessibility, and Input Monitoring, each used only while the ward is up. <a href="/docs/permissions">Why each one?</a></p>
+      </div>
+      <div class="card">
+        <h3>Updating</h3>
+        <p class="muted small">Use <b>Check for Updates…</b> in the menu bar, or:</p>
+        <Cmd lines={site.brew.upgrade} />
+      </div>
+      <div class="card">
+        <h3>Not notarized (yet)</h3>
+        <p class="muted small">Wardlume is signed but not notarized by Apple yet, which is why the direct downloads need a one-time step. Homebrew avoids it entirely.</p>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .page { padding-top: 56px; padding-bottom: 40px; }
+  .head { display: flex; gap: 20px; align-items: center; margin-bottom: 36px; flex-wrap: wrap; }
+  .head img { border-radius: 22px; box-shadow: var(--shadow); }
+  .head h1 { margin: 0 0 4px; font-size: clamp(2rem, 5vw, 3rem); }
+  .head p { margin: 0; }
+  .layout { align-items: start; }
+  @media (min-width: 900px) { .layout { grid-template-columns: 1.6fr 1fr; } }
+  .side { display: grid; gap: 16px; }
+  .h { font-size: 1.1rem; margin-bottom: 14px; }
+  .files { list-style: none; padding: 0; margin: 0 0 12px; display: grid; gap: 12px; }
+  .file { width: 100%; justify-content: space-between; border-radius: 12px; white-space: normal; text-align: left; }
+  .sha { display: block; word-break: break-all; font-size: 0.75rem; color: var(--muted); padding: 8px; background: var(--surface-2); border-radius: 8px; margin-top: 6px; }
+  details summary { cursor: pointer; margin-top: 6px; }
+  .plain { padding-left: 1.1em; margin: 0; }
+  .plain li { margin: 6px 0; }
+  .more { margin-top: 16px; }
+  .more h3 { margin-bottom: 6px; }
+</style>

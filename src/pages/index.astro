@@ -1,0 +1,289 @@
+---
+import Base from '../layouts/Base.astro';
+import GlassDemo from '../components/GlassDemo.astro';
+import Cmd from '../components/Cmd.astro';
+import InstallTabs from '../components/InstallTabs.astro';
+import FAQ from '../components/FAQ.astro';
+import { site } from '../site.config';
+import { faq } from '../lib/faq';
+import { latestRelease, formatDate } from '../lib/release';
+
+const r = await latestRelease();
+
+const useCases = [
+  { icon: '🤖', title: 'AI coding agents', text: 'Let Claude Code, Codex, or Cursor run for an hour without a stray keystroke landing in the prompt.' },
+  { icon: '🏗️', title: 'Builds, tests & training', text: 'Watch long builds, test suites, and ML runs finish with nobody poking at the keyboard.' },
+  { icon: '🎬', title: 'Renders & exports', text: 'No accidental clicks mid-export, and your Mac stays awake until it’s done.' },
+  { icon: '☕', title: 'A quick step away', text: 'Grab a coffee at the café. Come back to the exact same screen, still visibly working.' },
+];
+
+const features = [
+  { icon: '🛡️', title: 'Glass-shield ward', text: 'An animated Metal overlay over your live desktop. Readable screen, hard-locked input at the macOS event-tap level.' },
+  { icon: '👆', title: 'Touch ID unlock', text: 'Rest your finger or press your unlock shortcut. Falls back to your password.' },
+  { icon: '⌚', title: 'Apple Watch unlock', text: 'Tap the Mac, double-press your watch’s side button. Built-in setup steps and a “Send test to watch” check.' },
+  { icon: '🎭', title: 'Intruder reactions', text: 'A wrong touch springs a reaction image and sound. Silent Professional, Wizard, Grumpy Old Man, or your own.' },
+  { icon: '☕', title: 'Keeps your Mac awake', text: 'No idle sleep while warded, so the ward holds and your agents keep running.' },
+  { icon: '⏱️', title: 'Auto-ward when idle', text: 'Optionally casts the ward after 1–15 minutes idle, with a 10-second countdown you cancel by moving the mouse.' },
+  { icon: '🖥️', title: 'Multi-display & unplug-safe', text: 'Other monitors stay visible but locked, or blacked out. Unplugging a monitor never unlocks.' },
+  { icon: '⌨️', title: 'Your shortcuts', text: 'Remap activate and unlock keys. Optional no-auth emergency exit for peace of mind.' },
+  { icon: '🔒', title: 'Local-only', text: 'No network, no analytics, no accounts. Nothing leaves your Mac.' },
+];
+
+const compare = [
+  ['Screen stays visible', true, false],
+  ['Agents, builds & renders keep going in view', true, false],
+  ['Mac stays awake', true, false],
+  ['Blocks keyboard, mouse, trackpad & gestures', true, true],
+  ['Unlock with Touch ID or Apple Watch', true, true],
+  ['Reacts when someone touches it', true, false],
+  ['Auto-locks when you walk away', true, true],
+];
+---
+<Base>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="glow" aria-hidden="true"></div>
+    <div class="container center">
+      <a class="pill" href="/changelog">
+        <span class="new">New</span> v{r.version}: Apple Watch unlock &amp; auto-ward <span aria-hidden="true">→</span>
+      </a>
+      <h1>Lock the input.<br /><span class="grad">Keep the work in view.</span></h1>
+      <p class="lead">
+        <b>Wardlume</b> casts a glass ward over your Mac so you can <b>botsit</b>: leave your AI agents running while you step away.
+        Everyone can watch them work. Nobody can touch.
+      </p>
+      <div class="btn-row cta">
+        <a class="btn btn-primary" href="/download">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.2 1-4 2.5-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.2-.8s1.9.8 3.2.8c1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8 0 0-2.6-1-2.6-4ZM14 5.4c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4Z"/></svg>
+          Download for Mac
+        </a>
+        <a class="btn btn-ghost" href={site.links.github}>View on GitHub</a>
+      </div>
+      <div class="brew"><Cmd lines={site.brew.install} /></div>
+      <p class="meta small">
+        Free for personal use · v{r.version}{r.date && <> · {formatDate(r.date)}</>} · {site.requirements} · <a href={r.notesUrl}>release notes</a>
+      </p>
+    </div>
+
+    <div class="container demo-wrap">
+      <GlassDemo />
+    </div>
+  </section>
+
+  <!-- Use cases -->
+  <section class="section">
+    <div class="container">
+      <div class="center">
+        <span class="eyebrow">Use cases</span>
+        <h2>Step away. The work keeps going.</h2>
+        <p class="lead">For the gap between starting something long and coming back to finish it.</p>
+      </div>
+      <div class="grid grid-4 mt">
+        {useCases.map((u) => (
+          <div class="card">
+            <div class="ico">{u.icon}</div>
+            <h3>{u.title}</h3>
+            <p class="muted small">{u.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="section alt" id="how-it-works">
+    <div class="container">
+      <div class="center">
+        <span class="eyebrow">How it works</span>
+        <h2>One shortcut in. Touch ID out.</h2>
+      </div>
+      <ol class="steps mt">
+        <li class="glass">
+          <div class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>L</kbd></div>
+          <span class="num">01</span>
+          <h3>Lock</h3>
+          <p class="muted">Press the shortcut from anywhere, even inside your IDE, or use the menu bar. The glass ward rises instantly.</p>
+        </li>
+        <li class="glass">
+          <div class="keys big">🚶</div>
+          <span class="num">02</span>
+          <h3>Step away</h3>
+          <p class="muted">Keys, clicks, scrolls and gestures are blocked on every display. The screen stays visible and your Mac stays awake.</p>
+        </li>
+        <li class="glass">
+          <div class="keys"><span class="big">👆</span> <span class="or">or</span> <kbd>⌘</kbd><kbd>⇧</kbd><kbd>U</kbd></div>
+          <span class="num">03</span>
+          <h3>Unlock</h3>
+          <p class="muted">Touch ID, Apple Watch, or your password. Everything is exactly where you left it.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="center">
+        <span class="eyebrow">Features</span>
+        <h2>Everything a ward should do.</h2>
+        <p class="lead">And a little mischief for anyone who tries to touch it.</p>
+      </div>
+      <div class="grid grid-3 mt">
+        {features.map((f) => (
+          <div class="card feature">
+            <div class="ico">{f.icon}</div>
+            <h3>{f.title}</h3>
+            <p class="muted small">{f.text}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="reactions mt">
+        <figure><img src="/img/reaction-wizard.jpg" alt="Wizard reaction pack: a glowering wizard" loading="lazy" width="1200" height="686" /><figcaption>Wizard pack</figcaption></figure>
+        <figure><img src="/img/reaction-grumpyOldMan.jpg" alt="Grumpy Old Man reaction pack: a stern stare" loading="lazy" width="1200" height="686" /><figcaption>Grumpy Old Man pack</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison -->
+  <section class="section alt">
+    <div class="container">
+      <div class="center">
+        <span class="eyebrow">Why not just lock the screen?</span>
+        <h2>Wardlume vs the macOS lock screen</h2>
+      </div>
+      <div class="table-wrap mt">
+        <table class="compare">
+          <thead><tr><th></th><th>Wardlume</th><th>macOS lock screen</th></tr></thead>
+          <tbody>
+            {compare.map(([label, a, b]) => (
+              <tr>
+                <td>{label}</td>
+                <td class={a ? 'yes' : 'no'}>{a ? '✓' : '—'}</td>
+                <td class={b ? 'yes' : 'no'}>{b ? '✓' : '—'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Safety + privacy -->
+  <section class="section">
+    <div class="container grid grid-2">
+      <div class="card big-card">
+        <span class="eyebrow">Safety first</span>
+        <h3>There’s always a way out.</h3>
+        <p class="muted">Touch ID, Apple Watch, your password, or <kbd>⌘</kbd><kbd>⌥</kbd><kbd>Esc</kbd> Force Quit, which macOS reserves so no app can block it. Sleep always ends the ward, and an optional emergency-exit key is one toggle away.</p>
+        <a href="/safety">Read the Safety guide →</a>
+      </div>
+      <div class="card big-card">
+        <span class="eyebrow">Private by design</span>
+        <h3>Nothing leaves your Mac.</h3>
+        <p class="muted">No servers, no analytics, no accounts. Screen frames are drawn live to the glass, never saved or sent. Permissions are used only while the ward is up.</p>
+        <a href="/privacy">Read the privacy policy →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Install -->
+  <section class="section alt" id="install">
+    <div class="container narrow">
+      <div class="center">
+        <span class="eyebrow">Install</span>
+        <h2>Ready in a minute.</h2>
+        <p class="lead">A guided setup walks you through the three permissions on first launch.</p>
+      </div>
+      <div class="card mt"><InstallTabs /></div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="center">
+        <span class="eyebrow">FAQ</span>
+        <h2>Questions, answered.</h2>
+        <p class="lead">Something else? <a href="/support">Visit support</a>.</p>
+      </div>
+      <div class="mt"><FAQ items={faq} /></div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="final glass center">
+        <h2>Cast your first ward.</h2>
+        <p class="lead">Free for personal use. If it saves your agent’s run, consider sponsoring its development.</p>
+        <div class="btn-row cta">
+          <a class="btn btn-primary" href="/download">Download Wardlume</a>
+          <a class="btn btn-ghost" href="/pricing">Support the project</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { position: relative; padding: 72px 0 40px; overflow: hidden; }
+  .glow {
+    position: absolute; inset: -20% -10% auto; height: 720px; pointer-events: none;
+    background: radial-gradient(50% 50% at 50% 30%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 70%);
+    filter: blur(20px); opacity: 0.8;
+  }
+  .hero .container { position: relative; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 10px; padding: 6px 14px 6px 6px; border-radius: 999px;
+    background: var(--surface); border: 1px solid var(--border); color: var(--muted); font-size: 0.88rem; margin-bottom: 28px;
+  }
+  .pill:hover { text-decoration: none; color: var(--text); }
+  .new { background: var(--accent); color: var(--accent-ink); font-weight: 700; font-size: 0.72rem; padding: 4px 9px; border-radius: 999px; }
+  .grad { background: linear-gradient(90deg, var(--accent-2), var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero .lead { margin: 22px auto 30px; }
+  .cta { justify-content: center; }
+  .brew { max-width: 540px; margin: 22px auto 0; text-align: left; }
+  .meta { color: var(--faint); margin-top: 14px; }
+  .demo-wrap { margin-top: 56px; }
+
+  .mt { margin-top: 40px; }
+  .alt { background: var(--bg-2); border-block: 1px solid var(--border); }
+  .ico { font-size: 1.6rem; margin-bottom: 12px; }
+  .card h3 { margin-bottom: 6px; }
+  .card p { margin: 0; }
+
+  .steps { list-style: none; padding: 0; display: grid; gap: 16px; }
+  @media (min-width: 860px) { .steps { grid-template-columns: repeat(3, 1fr); } }
+  .steps li { padding: 28px; position: relative; }
+  .steps .keys { display: flex; gap: 5px; align-items: center; min-height: 40px; margin-bottom: 18px; }
+  .steps kbd { font-size: 1rem; min-width: 2.1em; padding: 0.25em 0.5em; }
+  .steps .big { font-size: 1.8rem; }
+  .or { color: var(--faint); font-size: 0.85rem; margin: 0 4px; }
+  .num { position: absolute; top: 26px; right: 26px; color: var(--faint); font: 600 0.85rem var(--mono); }
+  .steps p { margin: 0; }
+
+  .reactions { display: grid; gap: 16px; }
+  @media (min-width: 640px) { .reactions { grid-template-columns: 1fr 1fr; } }
+  .reactions figure { margin: 0; position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
+  .reactions img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+  .reactions figcaption {
+    position: absolute; left: 12px; bottom: 12px; background: rgba(8,14,12,0.75); color: #eafff6;
+    padding: 6px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 600;
+  }
+
+  .table-wrap { max-width: 760px; margin-inline: auto; overflow-x: auto; }
+  .compare { width: 100%; border-collapse: collapse; }
+  .compare th, .compare td { padding: 14px 12px; border-bottom: 1px solid var(--border); text-align: center; }
+  .compare th:first-child, .compare td:first-child { text-align: left; }
+  .compare th { color: var(--muted); font-size: 0.85rem; font-weight: 600; }
+  .compare th:nth-child(2) { color: var(--accent); }
+  .compare .yes { color: var(--accent); font-weight: 700; }
+  .compare .no { color: var(--faint); }
+
+  .big-card { padding: 32px; }
+  .big-card p { margin-bottom: 14px; }
+  .narrow { max-width: 760px; }
+  .final { padding: 56px 24px; }
+  .final .lead { margin: 12px auto 26px; }
+</style>

@@ -1,0 +1,10 @@
+---
+import Prose from '../layouts/Prose.astro';
+import { remoteMarkdown } from '../lib/remote-md';
+import { site } from '../site.config';
+// Rendered from the public repo's TERMS.md at build time. Edit it in the app repo, never here.
+const { title, html } = await remoteMarkdown('TERMS.md');
+---
+<Prose title={title} eyebrow="Legal" description="Terms of use for Wardlume. Free for noncommercial use." source={`${site.links.github}/blob/main/TERMS.md`}>
+  <Fragment set:html={html} />
+</Prose>

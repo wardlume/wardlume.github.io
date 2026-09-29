@@ -1,0 +1,93 @@
+---
+import Base from '../layouts/Base.astro';
+import { pricing, site } from '../site.config';
+const free = pricing.mode === 'free';
+---
+<Base title="Pricing" description="Wardlume is free for personal and other noncommercial use. Sponsor its development, or ask about a commercial license.">
+  <div class="container page">
+    <header class="center intro">
+      <span class="eyebrow">Pricing</span>
+      {free ? (
+        <>
+          <h1>Free for personal use.</h1>
+          <p class="lead">Every feature, no trial, no account. If Wardlume keeps your agents safe, you can help keep it going.</p>
+        </>
+      ) : (
+        <>
+          <h1>Simple pricing.</h1>
+          <p class="lead">Pay once, keep it.</p>
+        </>
+      )}
+    </header>
+
+    {free ? (
+      <div class="grid grid-3 plans">
+        <div class="card plan highlight">
+          <h2>Personal</h2>
+          <p class="price">$0</p>
+          <p class="muted small">Personal, study, hobby, nonprofit and education use.</p>
+          <ul>
+            <li>Every feature</li>
+            <li>All future updates</li>
+            <li>Touch ID &amp; Apple Watch unlock</li>
+            <li>Reaction packs &amp; custom packs</li>
+          </ul>
+          <a class="btn btn-primary" href="/download">Download</a>
+        </div>
+        <div class="card plan">
+          <h2>Supporter</h2>
+          <p class="price">Any amount</p>
+          <p class="muted small">Same app. Your support pays for Apple notarization and new features.</p>
+          <ul>
+            {pricing.donate.map((d) => <li>{d.note}</li>)}
+          </ul>
+          <div class="stack">
+            {pricing.donate.map((d, i) => <a class={`btn ${i === 0 ? 'btn-primary' : 'btn-ghost'}`} href={d.href}>💚 {d.label}</a>)}
+          </div>
+        </div>
+        <div class="card plan">
+          <h2>Commercial</h2>
+          <p class="price">Contact</p>
+          <p class="muted small">Using Wardlume at work for a company, or bundling it into a paid product or service.</p>
+          <ul>
+            <li>License for your team</li>
+            <li>Priority help</li>
+            <li>Invoice on request</li>
+          </ul>
+          <a class="btn btn-ghost" href={site.contactEmail ? `mailto:${site.contactEmail}?subject=Wardlume%20commercial%20license` : pricing.commercial.href}>{pricing.commercial.label}</a>
+        </div>
+      </div>
+    ) : (
+      <div class="grid grid-3 plans">
+        {pricing.tiers.map((t) => (
+          <div class={`card plan ${t.highlight ? 'highlight' : ''}`}>
+            <h2>{t.name}</h2>
+            <p class="price">{t.price}{t.cadence && <span class="small muted"> {t.cadence}</span>}</p>
+            <p class="muted small">{t.blurb}</p>
+            <ul>{t.features.map((f) => <li>{f}</li>)}</ul>
+            <a class={`btn ${t.highlight ? 'btn-primary' : 'btn-ghost'}`} href={t.cta.href}>{t.cta.label}</a>
+          </div>
+        ))}
+      </div>
+    )}
+
+    <p class="center small muted fine">
+      Wardlume is licensed under <a href={`https://github.com/${site.repo}/blob/main/LICENSE`}>PolyForm Noncommercial 1.0.0</a>. See <a href="/terms">Terms</a> for what counts as commercial use.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .page { padding-top: 56px; padding-bottom: 40px; }
+  .intro { margin-bottom: 40px; }
+  .plans { align-items: stretch; }
+  .plan { display: flex; flex-direction: column; padding: 28px; }
+  .plan.highlight { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), var(--shadow); }
+  .plan h2 { font-size: 1.1rem; color: var(--muted); margin-bottom: 8px; }
+  .price { font-size: 2.2rem; font-weight: 750; letter-spacing: -0.02em; margin: 0 0 8px; }
+  .plan ul { padding-left: 1.1em; margin: 8px 0 24px; flex: 1; }
+  .plan li { margin: 6px 0; font-size: 0.93rem; }
+  .plan li::marker { color: var(--accent); }
+  .stack { display: grid; gap: 8px; }
+  .fine { margin-top: 36px; }
+</style>

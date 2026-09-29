@@ -1,0 +1,30 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+const posts = (await getCollection('blog', (p) => !p.data.draft)).sort((a, b) => +b.data.date - +a.data.date);
+const fmt = (d: Date) => d.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<Base title="Blog" description="Notes on botsitting AI agents, keeping a Mac safe while work runs, and building Wardlume.">
+  <div class="container page">
+    <span class="eyebrow">Blog</span>
+    <h1>Notes from the ward</h1>
+    <p class="lead">Botsitting AI agents, keeping long-running work safe, and building Wardlume.</p>
+    <div class="posts">
+      {posts.map((p) => (
+        <a class="card post" href={`/blog/${p.id}`}>
+          <span class="small muted">{fmt(p.data.date)}</span>
+          <h2>{p.data.title}</h2>
+          <p class="muted">{p.data.description}</p>
+        </a>
+      ))}
+    </div>
+  </div>
+</Base>
+<style>
+  .page { padding-top: 56px; padding-bottom: 40px; max-width: 860px; }
+  .posts { display: grid; gap: 14px; margin-top: 36px; }
+  .post { color: var(--text); }
+  .post:hover { border-color: var(--accent); text-decoration: none; }
+  .post h2 { font-size: 1.35rem; margin: 6px 0; }
+  .post p { margin: 0; }
+</style>

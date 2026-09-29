@@ -1,0 +1,10 @@
+---
+import Prose from '../layouts/Prose.astro';
+import { remoteMarkdown } from '../lib/remote-md';
+import { site } from '../site.config';
+// Rendered from the public repo's CHANGELOG.md at build time. Edit it in the app repo, never here.
+const { title, html } = await remoteMarkdown('CHANGELOG.md');
+---
+<Prose title={title} eyebrow="Release notes" description="What's new in each version of Wardlume." source={`${site.links.github}/blob/main/CHANGELOG.md`}>
+  <Fragment set:html={html} />
+</Prose>

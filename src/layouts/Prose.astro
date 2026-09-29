@@ -1,0 +1,22 @@
+---
+import Base from './Base.astro';
+interface Props { title: string; description?: string; eyebrow?: string; source?: string; article?: boolean; }
+const { title, description, eyebrow, source, article } = Astro.props;
+---
+<Base title={title} description={description} article={article}>
+  <div class="container page">
+    <article class="prose">
+      {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+      <h1>{title}</h1>
+      <slot />
+      {source && (
+        <p class="src small">Source: <a href={source}>{source.replace('https://github.com/', '')}</a></p>
+      )}
+    </article>
+  </div>
+</Base>
+<style>
+  .page { padding-top: 56px; padding-bottom: 40px; }
+  .prose { margin: 0 auto; }
+  .src { color: var(--faint); margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--border); }
+</style>

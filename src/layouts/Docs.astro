@@ -1,0 +1,58 @@
+---
+import Base from './Base.astro';
+import { getCollection } from 'astro:content';
+import { site } from '../site.config';
+interface Props { title: string; description: string; slug?: string; }
+const { title, description, slug } = Astro.props;
+const docs = (await getCollection('docs')).sort((a, b) => a.data.order - b.data.order);
+const i = docs.findIndex((d) => d.id === slug);
+const prev = i > 0 ? docs[i - 1] : undefined;
+const next = i >= 0 && i < docs.length - 1 ? docs[i + 1] : undefined;
+---
+<Base title={title} description={description}>
+  <div class="container docs">
+    <aside class="side">
+      <details open class="nav">
+        <summary>Documentation</summary>
+        <ul>
+          <li><a href="/docs" aria-current={!slug ? 'page' : undefined}>Overview</a></li>
+          {docs.map((d) => (
+            <li><a href={`/docs/${d.id}`} aria-current={d.id === slug ? 'page' : undefined}><span>{d.data.icon}</span> {d.data.title}</a></li>
+          ))}
+          <li class="sep"><a href="/safety">🛟 Safety guide</a></li>
+          <li><a href="/support">💬 Support</a></li>
+        </ul>
+      </details>
+    </aside>
+    <article class="prose body">
+      <span class="eyebrow">Docs</span>
+      <h1>{title}</h1>
+      <p class="lead">{description}</p>
+      <slot />
+      {slug && (
+        <nav class="pager" aria-label="Pagination">
+          {prev ? <a class="card" href={`/docs/${prev.id}`}><span class="small muted">← Previous</span>{prev.data.title}</a> : <span />}
+          {next && <a class="card next" href={`/docs/${next.id}`}><span class="small muted">Next →</span>{next.data.title}</a>}
+        </nav>
+      )}
+      <p class="small muted edit">Something unclear or out of date? <a href={site.links.discussions}>Tell us in Discussions</a>.</p>
+    </article>
+  </div>
+</Base>
+<style>
+  .docs { display: grid; gap: 32px; padding-top: 40px; padding-bottom: 40px; }
+  @media (min-width: 900px) { .docs { grid-template-columns: 240px minmax(0, 1fr); gap: 56px; } }
+  .side .nav { position: sticky; top: 88px; }
+  .nav summary { font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--faint); cursor: pointer; margin-bottom: 10px; }
+  .nav ul { list-style: none; padding: 0; margin: 0; }
+  .nav a { display: flex; gap: 8px; padding: 7px 10px; border-radius: 8px; color: var(--muted); font-size: 0.93rem; }
+  .nav a:hover, .nav a[aria-current='page'] { background: var(--surface); color: var(--text); text-decoration: none; }
+  .nav a[aria-current='page'] { box-shadow: inset 2px 0 0 var(--accent); }
+  .sep { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+  .body .lead { margin-bottom: 1.5em; }
+  .pager { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 48px; }
+  .pager a { display: flex; flex-direction: column; gap: 4px; color: var(--text); font-weight: 600; padding: 16px; }
+  .pager a:hover { border-color: var(--accent); text-decoration: none; }
+  .pager .next { text-align: right; grid-column: 2; }
+  .edit { margin-top: 32px; }
+</style>

@@ -1,0 +1,72 @@
+---
+import Cmd from './Cmd.astro';
+import { site } from '../site.config';
+import { latestRelease, formatSize } from '../lib/release';
+const r = await latestRelease();
+---
+<div class="tabs" data-tabs>
+  <div class="tablist" role="tablist" aria-label="Install method">
+    <button role="tab" aria-selected="true" aria-controls="tab-brew" id="t-brew">Homebrew <span class="rec">Recommended</span></button>
+    <button role="tab" aria-selected="false" aria-controls="tab-pkg" id="t-pkg" tabindex="-1">Installer (.pkg)</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-dmg" id="t-dmg" tabindex="-1">Disk image (.dmg)</button>
+  </div>
+
+  <div role="tabpanel" id="tab-brew" aria-labelledby="t-brew" class="panel">
+    <Cmd lines={site.brew.install} />
+    <p class="small muted">Cleanest install: no “damaged” prompt, no quarantine cleanup. Homebrew 6+ asks you to trust a third‑party tap once; on older Homebrew skip the <code>brew trust</code> line. Update later with <code>{site.brew.upgrade}</code>.</p>
+  </div>
+
+  <div role="tabpanel" id="tab-pkg" aria-labelledby="t-pkg" class="panel" hidden>
+    <ol>
+      <li>Download <a href={r.pkg?.url ?? site.links.releases}><b>{r.pkg?.name ?? 'the latest .pkg'}</b></a>{r.pkg && <span class="muted"> ({formatSize(r.pkg.size)})</span>}.</li>
+      <li>Open it. If macOS calls it “unidentified”, <b>right‑click → Open</b> (or System Settings → Privacy &amp; Security → <b>Open Anyway</b>) once.</li>
+      <li>Click through the installer. Wardlume lands in Applications and opens normally.</li>
+    </ol>
+  </div>
+
+  <div role="tabpanel" id="tab-dmg" aria-labelledby="t-dmg" class="panel" hidden>
+    <ol>
+      <li>Download <a href={r.dmg?.url ?? site.links.releases}><b>{r.dmg?.name ?? 'the latest .dmg'}</b></a>{r.dmg && <span class="muted"> ({formatSize(r.dmg.size)})</span>} and drag <b>Wardlume</b> into Applications.</li>
+      <li>macOS will say <b>“Wardlume is damaged”</b>. It isn’t; unnotarized downloads are just quarantined. Clear it once:</li>
+    </ol>
+    <Cmd lines="xattr -dr com.apple.quarantine /Applications/Wardlume.app" />
+  </div>
+</div>
+
+<script>
+  for (const t of document.querySelectorAll<HTMLElement>('[data-tabs]')) {
+    const tabs = [...t.querySelectorAll<HTMLButtonElement>('[role=tab]')];
+    const select = (tab: HTMLButtonElement) => {
+      for (const x of tabs) {
+        const on = x === tab;
+        x.setAttribute('aria-selected', String(on));
+        x.tabIndex = on ? 0 : -1;
+        (t.querySelector('#' + x.getAttribute('aria-controls')) as HTMLElement).hidden = !on;
+      }
+    };
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(tab));
+      tab.addEventListener('keydown', (e) => {
+        const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (!d) return;
+        const next = tabs[(i + d + tabs.length) % tabs.length];
+        select(next); next.focus();
+      });
+    });
+  }
+</script>
+
+<style>
+  .tabs { text-align: left; }
+  .tablist { display: flex; gap: 4px; overflow-x: auto; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
+  .tablist button {
+    background: none; border: 0; border-bottom: 2px solid transparent; color: var(--muted); cursor: pointer;
+    padding: 10px 12px; font: 600 0.9rem var(--font); white-space: nowrap; margin-bottom: -1px;
+  }
+  .tablist button[aria-selected='true'] { color: var(--text); border-bottom-color: var(--accent); }
+  .rec { font-size: 0.7rem; color: var(--accent); margin-left: 4px; }
+  .panel ol { padding-left: 1.2em; margin: 0 0 12px; }
+  .panel li { margin: 8px 0; }
+  .panel p { margin-top: 12px; }
+  .panel code { background: var(--surface-2); padding: 0.1em 0.35em; border-radius: 5px; font-size: 0.88em; }
+</style>

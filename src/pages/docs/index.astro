@@ -1,0 +1,22 @@
+---
+import Docs from '../../layouts/Docs.astro';
+import { getCollection } from 'astro:content';
+const docs = (await getCollection('docs')).sort((a, b) => a.data.order - b.data.order);
+---
+<Docs title="Wardlume documentation" description="Everything you need to set up Wardlume, unlock it your way, and tune how it behaves.">
+  <div class="list">
+    {docs.map((d) => (
+      <a class="card item" href={`/docs/${d.id}`}>
+        <span class="ico">{d.data.icon}</span>
+        <span><b>{d.data.title}</b><br /><span class="small muted">{d.data.description}</span></span>
+      </a>
+    ))}
+  </div>
+</Docs>
+<style>
+  .list { display: grid; gap: 12px; }
+  @media (min-width: 700px) { .list { grid-template-columns: 1fr 1fr; } }
+  .item { display: flex; gap: 14px; align-items: flex-start; color: var(--text); padding: 18px; }
+  .item:hover { border-color: var(--accent); text-decoration: none; }
+  .ico { font-size: 1.4rem; line-height: 1.2; }
+</style>
