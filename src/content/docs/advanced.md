@@ -5,7 +5,15 @@ order: 7
 icon: ⚠️
 ---
 
-**Settings → Advanced** holds the rarely needed options.
+**Settings → Advanced** holds updates and the rarely needed options.
+
+## Updates
+
+- **Check for updates automatically:** once a day, never while the ward is up.
+- **Download and install updates automatically:** installs when you quit Wardlume.
+- **Status and Check Now:** shows when Wardlume last checked and why a check failed, for example offline or a server error.
+
+Updates come through a separate, sandboxed downloader. See [Privacy & security](/docs/privacy-security).
 
 ## Emergency exit
 
@@ -15,4 +23,4 @@ Anyone at the keyboard can use it, so leave it off unless you want a guaranteed 
 
 ## Reset all settings
 
-**Reset all** returns shortcuts, reactions, automation, displays, and gestures to their defaults. Your custom images and sound are kept.
+**Reset all** returns shortcuts, reactions, automation, displays, and gestures to their defaults. Your custom images and sound, update choices, and permissions are kept.

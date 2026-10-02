@@ -21,8 +21,12 @@ export const faq = [
     a: 'No. While the ward is up Wardlume holds a standard power assertion (the same mechanism as <code>caffeinate</code>), so the display and system don’t idle‑sleep. Closing the lid still ends the ward, on purpose.',
   },
   {
+    q: 'Is Wardlume safe? Why does it need Screen Recording?',
+    a: 'Screen Recording is how the glass shows your live desktop behind it, and Wardlume can’t send what it sees anywhere. <b>macOS blocks the app from the internet</b>: it’s sandboxed with no network entitlement. It captures only while the ward is up, straight to the GPU, and never saves frames. Check it yourself in <b>Settings → Privacy &amp; security</b>, or run <code>codesign -d --entitlements - /Applications/Wardlume.app</code>. See <a href="/privacy">Privacy</a> for how to read the result and confirm it with LuLu or Little Snitch.',
+  },
+  {
     q: 'Does Wardlume collect any data?',
-    a: 'No. The app makes no network requests, has no analytics and no accounts. Screen frames are drawn live to the glass and never saved or sent. See <a href="/privacy">Privacy</a>.',
+    a: 'No. No analytics, no accounts, and the app itself can’t connect to the internet. The only thing that goes online is the separate updater (Sparkle, in its own sandbox), and only to fetch signed Wardlume updates after you allow it. Nothing about you is sent. See <a href="/privacy">Privacy</a>.',
   },
   {
     q: 'Apple Watch unlock isn’t working',
