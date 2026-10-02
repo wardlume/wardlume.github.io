@@ -19,7 +19,7 @@ icon: 🧹
 brew upgrade --cask wardlume
 ```
 
-Wardlume's cask is marked as self-updating, so later `brew upgrade` runs leave it to the app. Use `brew upgrade --cask --greedy wardlume` to force it.
+`brew upgrade` keeps working too, if you prefer Homebrew.
 
 Your settings and permissions carry over between versions.
 
