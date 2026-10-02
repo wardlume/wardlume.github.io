@@ -5,7 +5,7 @@ order: 2
 icon: 🔐
 ---
 
-Wardlume uses each permission **only while the ward is active**. Nothing is recorded, logged, or sent anywhere; the app makes no network requests.
+Wardlume uses each permission **only while the ward is active**. Nothing is recorded, logged, or sent anywhere, and macOS blocks the app from the internet. See [Privacy & security](/docs/privacy-security) to verify it yourself.
 
 | Permission | What Wardlume uses it for |
 |---|---|
