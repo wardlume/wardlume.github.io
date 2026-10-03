@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
   schedule:
-    - cron: '7 * * * *'   # hourly: redeploy only if a new release, doc change, or download landed
+    - cron: '17 3 * * *'  # daily: redeploy only if a new release, doc change, or download landed
   workflow_dispatch:       # gh workflow run deploy.yml -R wardlume/wardlume.github.io
 
 permissions:
@@ -69,7 +69,7 @@ jobs:
         uses: actions/deploy-pages@v4
 
   # Tell IndexNow search engines (Bing & co.) the pages changed.
-  # Skipped on the hourly rebuilds, which are mostly download-count refreshes.
+  # Skipped on the daily rebuilds, which are mostly download-count refreshes.
   indexnow:
     needs: deploy
     if: github.event_name != 'schedule'

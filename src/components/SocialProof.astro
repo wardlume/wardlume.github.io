@@ -2,7 +2,7 @@
 // Home-page download counter. 'count' animates up when scrolled into view;
 // 'laurel' is the award-style badge, kept for a future milestone (e.g. 1,000+).
 interface Props { variant: 'laurel' | 'count'; count: number; label?: string; }
-const { variant, count, label = 'downloads' } = Astro.props;
+const { variant, count, label = 'Macs warded' } = Astro.props;
 const shown = `${count.toLocaleString('en-US')}+`;
 
 // Laurel branch (left side; the right side is mirrored): a curved stem with
