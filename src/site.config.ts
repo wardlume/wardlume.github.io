@@ -36,6 +36,13 @@ export const site = {
   // Leave empty to hide. Shown on Support and Pricing.
   contactEmail: 'workwithvinshu@gmail.com',
 
+  // Top-of-home banner. `latest` describes the newest release (update it each
+  // release); `always` is a standing highlight shown next to it on every release.
+  banner: {
+    latest: 'Intruder photo',
+    always: { icon: '⌚', text: 'Apple Watch unlock', since: 'v1.7', href: '/docs/unlocking#apple-watch' },
+  },
+
   // Home-page "Macs warded" counter: every GitHub release download (website,
   // Homebrew, in-app updates), refreshed daily. `extra` is for copies shared outside GitHub; only add an
   // accurate, documented number. `variant` 'laurel' is for a future milestone.

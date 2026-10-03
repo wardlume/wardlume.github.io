@@ -64,15 +64,17 @@ const compare = [
   <section class="hero">
     <div class="glow" aria-hidden="true"></div>
     <div class="container center">
-      <a class="pill" href="/changelog">
-        <span class="new">New</span> v{r.version}: Intruder photo <span aria-hidden="true">→</span>
-      </a>
+      <div class="pills">
+        <a class="pill" href="/changelog">
+          <span class="new">New</span> v{r.version}: {site.banner.latest} <span aria-hidden="true">→</span>
+        </a>
+        <a class="pill" href={site.banner.always.href}>
+          <span class="new soft">{site.banner.always.icon}</span> {site.banner.always.text} <span class="since">· since {site.banner.always.since}</span> <span aria-hidden="true">→</span>
+        </a>
+      </div>
       <p class="brandline">Wardlume for macOS</p>
       <h1>Lock the input.<br /><span class="grad">Keep the work in view.</span></h1>
-      <p class="lead">
-        <b>Wardlume</b> casts a glass ward over your Mac so you can <b>botsit</b>: leave your AI agents running while you step away.
-        Everyone can watch them work. Nobody can touch.
-      </p>
+      <p class="lead short">Your AI agents keep working in full view.<br />Nobody can touch your Mac.</p>
       <div class="btn-row cta">
         <a class="btn btn-primary" href="/download">
           <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.2 1-4 2.5-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.2-.8s1.9.8 3.2.8c1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8 0 0-2.6-1-2.6-4ZM14 5.4c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4Z"/></svg>
@@ -250,6 +252,11 @@ const compare = [
 </Base>
 
 <style>
+  .pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 28px; }
+  .pills .pill { margin-bottom: 0; }
+  .new.soft { background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent-2); padding: 3px 8px; }
+  .since { color: var(--faint); }
+  .lead.short { max-width: 560px; }
   .brandline { font-weight: 700; font-size: 1.05rem; letter-spacing: 0.01em; color: var(--muted); margin: 0 0 12px; }
   .hero { position: relative; padding: 72px 0 40px; overflow: hidden; }
   .glow {
