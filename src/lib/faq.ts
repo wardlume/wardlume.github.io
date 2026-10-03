@@ -25,6 +25,10 @@ export const faq = [
     a: 'Screen Recording is how the glass shows your live desktop behind it, and Wardlume can’t send what it sees anywhere. <b>macOS blocks the app from the internet</b>: it’s sandboxed with no network entitlement. It captures only while the ward is up, straight to the GPU, and never saves frames. Check it yourself in <b>Settings → Privacy &amp; security</b>, or run <code>codesign -d --entitlements - /Applications/Wardlume.app</code>. See <a href="/privacy">Privacy</a> for how to read the result and confirm it with LuLu or Little Snitch.',
   },
   {
+    q: 'Does Wardlume take photos of people?',
+    a: 'Only if you turn on <b>Intruder photo</b> (off by default), and then only when someone <b>fails to unlock</b>: a wrong Touch ID until macOS gives up, or a wrong password. Never when they just cancel, and never covertly: the camera light always shows and the glass says “Failed unlocks are photographed”. Photos stay on your Mac (the app has no internet access) and are deleted after 30 days by default. See <a href="/docs/intruder-photo">Intruder photo</a>.',
+  },
+  {
     q: 'Does Wardlume collect any data?',
     a: 'No. No analytics, no accounts, and the app itself can’t connect to the internet. The only thing that goes online is the separate updater (Sparkle, in its own sandbox), and only to fetch signed Wardlume updates after you allow it. Nothing about you is sent. See <a href="/privacy">Privacy</a>.',
   },

@@ -12,6 +12,7 @@ icon: 🛡️
 | **Internet access** | **Blocked by macOS.** Wardlume runs in Apple's App Sandbox with no network entitlement, so macOS refuses every connection it tries. |
 | **Screen capture** | **Only while warded.** It draws your live desktop behind the glass, and is off the rest of the time. |
 | **Recordings saved** | **None.** Frames go straight to the GPU and are never written to disk. |
+| **Camera** | **Off** unless you turn on [Intruder photo](/docs/intruder-photo). Then only on a failed unlock, with photos kept on this Mac. |
 
 ## Verify it yourself
 
@@ -21,7 +22,7 @@ Run this in Terminal:
 codesign -d --entitlements - /Applications/Wardlume.app
 ```
 
-You'll see `com.apple.security.app-sandbox` and `com.apple.security.screen-recording`, and **no** `com.apple.security.network.client` or `network.server`. Without those, the app can't open a connection.
+You'll see `com.apple.security.app-sandbox`, `com.apple.security.screen-recording`, and `com.apple.security.device.camera` (so Intruder photo *can* be turned on; macOS still asks you first), and **no** `com.apple.security.network.client` or `network.server`. Without those, the app can't open a connection.
 
 A network monitor such as [LuLu](https://objective-see.org/products/lulu.html) (free) or Little Snitch confirms this in practice: Wardlume itself never connects.
 

@@ -36,6 +36,11 @@ export const site = {
   // Leave empty to hide. Shown on Support and Pricing.
   contactEmail: 'workwithvinshu@gmail.com',
 
+  // Home-page download counter: every GitHub release download (website, Homebrew,
+  // in-app updates). `extra` is for copies shared outside GitHub; only add an
+  // accurate, documented number. `variant` 'laurel' is for a future milestone.
+  downloads: { show: true, variant: 'count' as 'count' | 'laurel', extra: 0, minimum: 1 },
+
   // Search engine ownership tokens (Google Search Console / Bing Webmaster Tools).
   // Paste the content="…" value of each verification meta tag here.
   verification: { google: 'TYYKYcZFc7BVzrRpWoQtXpr_djAfHCMSFfRJ9rlpDao', bing: '' },

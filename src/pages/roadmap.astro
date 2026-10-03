@@ -27,10 +27,8 @@ const groups = [
     title: 'Exploring',
     tag: 'idea',
     items: [
-      { icon: '🤖', t: 'Agent status on the ward', d: 'See whether Claude Code or Codex is Working, Needs input, or Finished, right on the glass, with an optional sound.' },
-      { icon: '🧠', t: 'Agent-aware auto-ward', d: 'Only auto-ward while an AI agent is actually running.' },
       { icon: '🔕', t: 'Hide notifications while warded', d: 'Turn on a Focus mode during the ward so message banners can’t leak.' },
-      { icon: '📋', t: 'Session summary on unlock', d: 'How long you were away, when the agent finished, and any intrusion attempts.' },
+      { icon: '📋', t: 'Session summary on unlock', d: 'How long you were away and how many intrusion attempts there were.' },
       { icon: '🖥️', t: 'Glass ward on every monitor', d: 'The full animated glass on all displays, not just the one you activate from.' },
       { icon: '⌨️', t: 'Command line & URL scheme', d: 'wardlume lock from a script, or open wardlume://lock from anywhere.' },
       { icon: '🔋', t: 'Power guard', d: 'A heads-up when you ward on battery without a charger.' },
@@ -39,7 +37,7 @@ const groups = [
 ];
 const labels: Record<string, string> = { soon: 'Coming soon', planned: 'Planned', idea: 'Exploring' };
 ---
-<Base title="Roadmap" description="What's coming to Wardlume: notarization, demo video, commercial license, phone walk-away lock, agent status, and more.">
+<Base title="Roadmap" description="What's coming to Wardlume: notarization, demo video, commercial license, phone walk-away lock, and more.">
   <div class="container page">
     <header class="center intro">
       <span class="eyebrow">Roadmap</span>

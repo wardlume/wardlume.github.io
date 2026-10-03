@@ -30,3 +30,5 @@ Make the ward your own. Drag a file onto a slot or click **Browse**; leave a slo
 | **Reaction sound** | Plays with the reaction image | MP3, M4A, WAV · up to 10 MB |
 
 Wardlume copies your files into its own sandboxed folder; your originals are never modified or uploaded. Removing a custom asset deletes only Wardlume's copy.
+
+Want a photo of whoever tries to unlock? See [Intruder photo](/docs/intruder-photo) (optional, off by default).

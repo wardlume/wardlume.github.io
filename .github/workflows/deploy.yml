@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
   schedule:
-    - cron: '7 * * * *'   # hourly: redeploy only if a new release or doc change landed
+    - cron: '7 * * * *'   # hourly: redeploy only if a new release, doc change, or download landed
   workflow_dispatch:       # gh workflow run deploy.yml -R wardlume/wardlume.github.io
 
 permissions:
@@ -31,11 +31,12 @@ jobs:
           live="$(curl -fsSL https://wardlume.github.io/version.json || echo '{}')"
           release="$(gh api repos/arpitagarwal1301/wardlume/releases/latest -q .tag_name)"
           docs="$(gh api repos/arpitagarwal1301/wardlume/commits/main -q .sha)"
-          echo "live: $live"; echo "github: release=$release docs=$docs"
-          if [ "$(jq -r .release <<<"$live")" = "$release" ] && [ "$(jq -r .docs <<<"$live")" = "$docs" ]; then
+          downloads="$(gh api --paginate 'repos/arpitagarwal1301/wardlume/releases?per_page=100' -q '.[].assets[].download_count' | awk '{s+=$1} END {print s+0}')"
+          echo "live: $live"; echo "github: release=$release docs=$docs downloads=$downloads"
+          if [ "$(jq -r .release <<<"$live")" = "$release" ] && [ "$(jq -r .docs <<<"$live")" = "$docs" ] && [ "$(jq -r .downloads <<<"$live")" = "$downloads" ]; then
             echo "changed=false" >> "$GITHUB_OUTPUT"; echo "Up to date."
           else
-            echo "changed=true" >> "$GITHUB_OUTPUT"; echo "New release or docs: rebuilding."
+            echo "changed=true" >> "$GITHUB_OUTPUT"; echo "New release, docs, or downloads: rebuilding."
           fi
 
   build:
@@ -68,8 +69,10 @@ jobs:
         uses: actions/deploy-pages@v4
 
   # Tell IndexNow search engines (Bing & co.) the pages changed.
+  # Skipped on the hourly rebuilds, which are mostly download-count refreshes.
   indexnow:
     needs: deploy
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5

@@ -4,11 +4,14 @@ import GlassDemo from '../components/GlassDemo.astro';
 import Cmd from '../components/Cmd.astro';
 import InstallTabs from '../components/InstallTabs.astro';
 import FAQ from '../components/FAQ.astro';
+import SocialProof from '../components/SocialProof.astro';
 import { site } from '../site.config';
 import { faq } from '../lib/faq';
-import { latestRelease, formatDate } from '../lib/release';
+import { latestRelease, formatDate, totalDownloads } from '../lib/release';
 
 const r = await latestRelease();
+const downloads = (await totalDownloads()) + site.downloads.extra;
+const showDownloads = site.downloads.show && downloads >= site.downloads.minimum;
 
 const plain = (html: string) => html.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&');
 const faqLd = {
@@ -30,9 +33,9 @@ const useCases = [
 
 const features = [
   { icon: '🛡️', title: 'Glass-shield ward', text: 'An animated Metal overlay over your live desktop. Readable screen, hard-locked input at the macOS event-tap level.' },
-  { icon: '👆', title: 'Touch ID unlock', text: 'Rest your finger or press your unlock shortcut. Falls back to your password.' },
-  { icon: '⌚', title: 'Apple Watch unlock', text: 'Tap the Mac, double-press your watch’s side button. Built-in setup steps and a “Send test to watch” check.' },
+  { icon: '👆', title: 'Touch ID & Apple Watch unlock', text: 'Rest your finger, press your unlock shortcut, or double-press your watch’s side button. Falls back to your password.' },
   { icon: '🎭', title: 'Intruder reactions', text: 'A wrong touch springs a reaction image and sound. Silent Professional, Wizard, Grumpy Old Man, or your own.' },
+  { icon: '📷', title: 'Intruder photo (optional)', text: 'Off by default. Photographs anyone who fails to unlock, with a notice on the glass. Photos never leave your Mac.' },
   { icon: '☕', title: 'Keeps your Mac awake', text: 'No idle sleep while warded, so the ward holds and your agents keep running.' },
   { icon: '⏱️', title: 'Auto-ward when idle', text: 'Optionally casts the ward after 1–15 minutes idle, with a 10-second countdown you cancel by moving the mouse.' },
   { icon: '🖥️', title: 'Multi-display & unplug-safe', text: 'Other monitors stay visible but locked, or blacked out. Unplugging a monitor never unlocks.' },
@@ -47,6 +50,7 @@ const compare = [
   ['Blocks keyboard, mouse, trackpad & gestures', true, true],
   ['Unlock with Touch ID or Apple Watch', true, true],
   ['Reacts when someone touches it', true, false],
+  ['Photographs failed unlocks (optional)', true, false],
   ['Auto-locks when you walk away', true, true],
 ];
 ---
@@ -61,7 +65,7 @@ const compare = [
     <div class="glow" aria-hidden="true"></div>
     <div class="container center">
       <a class="pill" href="/changelog">
-        <span class="new">New</span> v{r.version}: Apple Watch unlock &amp; auto-ward <span aria-hidden="true">→</span>
+        <span class="new">New</span> v{r.version}: Intruder photo <span aria-hidden="true">→</span>
       </a>
       <p class="brandline">Wardlume for macOS</p>
       <h1>Lock the input.<br /><span class="grad">Keep the work in view.</span></h1>
@@ -76,6 +80,7 @@ const compare = [
         </a>
         <a class="btn btn-ghost" href={site.links.github}>View on GitHub</a>
       </div>
+      {showDownloads && <SocialProof variant={site.downloads.variant} count={downloads} />}
       <div class="brew"><Cmd lines={site.brew.install} /></div>
       <p class="meta small">
         Free for personal use · v{r.version}{r.date && <> · {formatDate(r.date)}</>} · {site.requirements} · <a href={r.notesUrl}>release notes</a>

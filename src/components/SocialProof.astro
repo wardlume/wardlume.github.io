@@ -1,0 +1,85 @@
+---
+// Home-page download counter. 'count' animates up when scrolled into view;
+// 'laurel' is the award-style badge, kept for a future milestone (e.g. 1,000+).
+interface Props { variant: 'laurel' | 'count'; count: number; label?: string; }
+const { variant, count, label = 'downloads' } = Astro.props;
+const shown = `${count.toLocaleString('en-US')}+`;
+
+// Laurel branch (left side; the right side is mirrored): a curved stem with
+// pairs of slim leaves angled up along it, smaller toward the tip.
+const P0 = [40, 84], P1 = [4, 58], P2 = [18, 6];            // quadratic stem
+const q = (t: number, i: number) => (1 - t) ** 2 * P0[i] + 2 * (1 - t) * t * P1[i] + t * t * P2[i];
+const dq = (t: number, i: number) => 2 * (1 - t) * (P1[i] - P0[i]) + 2 * t * (P2[i] - P1[i]);
+const stem = `M${P0.join(',')} Q${P1.join(',')} ${P2.join(',')}`;
+const leaves = [0.12, 0.3, 0.48, 0.66, 0.84].flatMap((t, k) => {
+  const x = q(t, 0), y = q(t, 1);
+  const heading = (Math.atan2(dq(t, 1), dq(t, 0)) * 180) / Math.PI + 90; // leaf points along the stem
+  const sc = (1.05 - k * 0.12).toFixed(2);
+  return [-34, 30].map((off) => ({ x: x.toFixed(1), y: y.toFixed(1), rot: (heading + off).toFixed(0), s: sc }));
+}).concat([{ x: P2[0].toFixed(1), y: P2[1].toFixed(1), rot: ((Math.atan2(dq(1, 1), dq(1, 0)) * 180) / Math.PI + 90).toFixed(0), s: '0.7' }]);
+---
+{variant === 'laurel' && (
+  <div class="sp-laurel" aria-label={`${shown} ${label}`}>
+    <svg class="branch" viewBox="0 0 56 88" aria-hidden="true">
+      <path class="stem" d={stem} />
+      {leaves.map((l) => <path d="M0,0 C4,-5 4,-12 0,-17 C-4,-12 -4,-5 0,0Z" transform={`translate(${l.x} ${l.y}) rotate(${l.rot}) scale(${l.s})`} />)}
+    </svg>
+    <div class="txt"><b>{shown}</b><span>{label}</span></div>
+    <svg class="branch flip" viewBox="0 0 56 88" aria-hidden="true">
+      <path class="stem" d={stem} />
+      {leaves.map((l) => <path d="M0,0 C4,-5 4,-12 0,-17 C-4,-12 -4,-5 0,0Z" transform={`translate(${l.x} ${l.y}) rotate(${l.rot}) scale(${l.s})`} />)}
+    </svg>
+  </div>
+)}
+
+{variant === 'count' && (
+  <div class="sp-count">
+    <b class="big" data-count={count}>{shown}</b>
+    <span>{label}</span>
+  </div>
+)}
+
+
+
+<script>
+  // Count-up for the big number when it scrolls into view.
+  for (const el of document.querySelectorAll<HTMLElement>('.sp-count .big[data-count]')) {
+    const target = Number(el.dataset.count);
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) continue;
+    const run = () => {
+      const t0 = performance.now(), dur = 1400;
+      const step = (now: number) => {
+        const p = Math.min(1, (now - t0) / dur);
+        const v = Math.round(target * (1 - Math.pow(1 - p, 3)));
+        el.textContent = `${v.toLocaleString('en-US')}+`;
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+    new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { run(); o.disconnect(); } }).observe(el);
+  }
+</script>
+
+<style>
+  /* Laurel award badge */
+  .sp-laurel { display: inline-flex; align-items: center; gap: 6px; margin: 30px auto 0; }
+  .branch { width: 44px; height: 70px; fill: var(--accent-2); opacity: 0.95; overflow: visible; }
+  .branch .stem { fill: none; stroke: var(--accent-2); stroke-width: 1.6; stroke-linecap: round; }
+  .branch.flip { transform: scaleX(-1); }
+  .sp-laurel .txt { display: flex; flex-direction: column; align-items: center; line-height: 1.05; }
+  .sp-laurel b {
+    font-size: 2.2rem; font-weight: 800; letter-spacing: -0.03em;
+    background: linear-gradient(90deg, var(--accent-2), var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .sp-laurel span { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+
+  /* Big count-up number */
+  .sp-count { display: flex; flex-direction: column; align-items: center; margin: 34px auto 0; }
+  .sp-count .big {
+    font-size: clamp(3rem, 9vw, 4.6rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1;
+    background: linear-gradient(180deg, var(--text) 10%, var(--accent-2) 90%); -webkit-background-clip: text; background-clip: text; color: transparent;
+    font-variant-numeric: tabular-nums;
+  }
+  .sp-count span { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
+
+</style>

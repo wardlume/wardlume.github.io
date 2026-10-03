@@ -1,6 +1,6 @@
 ---
 title: Permissions
-description: The three macOS permissions Wardlume asks for, why each one is needed, and how to fix them.
+description: The three macOS permissions Wardlume asks for, the optional camera, why each one is needed, and how to fix them.
 order: 2
 icon: 🔐
 ---
@@ -12,6 +12,7 @@ Wardlume uses each permission **only while the ward is active**. Nothing is reco
 | **Screen Recording** | Draw the live desktop behind the glass. Frames go straight to the overlay and are never saved or transmitted. |
 | **Accessibility** | Install the input lock that blocks the keyboard, mouse, and trackpad. |
 | **Input Monitoring** | Notice intrusion attempts so the ward can react. |
+| **Camera** (optional) | Only for [Intruder photo](/docs/intruder-photo), off by default: one photo when someone fails to unlock. Skip it in setup and Wardlume never uses the camera. |
 
 **Keeping your Mac awake needs no permission.** It's a standard power assertion (the same mechanism as `caffeinate`), held only while warded.
 
@@ -27,7 +28,7 @@ macOS occasionally resets permissions after an update. When that happens:
 - Activating the ward reopens the setup instead of casting a half-working ward. Wardlume fails closed.
 - If Screen Recording is switched off *while* warded, Wardlume drops the ward and shows a **Ward Deactivated** alert rather than leaving you behind a frozen image.
 
-You can also check everything at a glance in **Settings → Overview → Permissions**.
+You can also check everything at a glance in **Settings → Overview → Permissions**. Its **Camera** row has a switch for Intruder photo and a link to System Settings if you want to remove camera access entirely (macOS only lets you do that there).
 
 ## Built with PermissionPilot
 
