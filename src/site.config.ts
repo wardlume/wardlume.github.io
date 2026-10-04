@@ -44,7 +44,7 @@ export const site = {
   },
 
   // Home-page "Macs warded" counter: every GitHub release download (website,
-  // Homebrew, in-app updates), refreshed daily. `extra` is for copies shared outside GitHub; only add an
+  // Homebrew, in-app updates), refreshed hourly. `extra` is for copies shared outside GitHub; only add an
   // accurate, documented number. `variant` 'laurel' is for a future milestone.
   downloads: { show: true, variant: 'count' as 'count' | 'laurel', extra: 0, minimum: 1 },
 
