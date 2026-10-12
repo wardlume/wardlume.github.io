@@ -5,7 +5,7 @@ order: 1
 icon: 🚀
 ---
 
-Wardlume is a menu-bar app that locks your Mac's keyboard, mouse, and trackpad behind an animated glass shield while everything on screen keeps running in view. It's made for **botsitting**: leaving an AI coding agent (Claude Code, Codex, Cursor, …) working while you step away.
+Wardlume is a menu-bar app that locks your Mac's keyboard, mouse, and trackpad behind a see-through shield while everything on screen keeps running in view. It's made for **botsitting**: leaving an AI coding agent (Claude Code, Codex, Cursor, …) working while you step away.
 
 ## 1. Install
 
@@ -21,14 +21,14 @@ Prefer a regular download? See [Download](/download) for the `.pkg` and `.dmg`.
 
 ## 2. Finish the guided setup
 
-On first launch, a setup window asks for three permissions, one at a time. Each one deep-links to the right System Settings pane and checks itself off live as you grant it. Some grants only apply after a relaunch, so the wizard offers **Quit & Reopen** when needed.
+On first launch, a setup window asks for two permissions, Accessibility and Input Monitoring, plus two optional ones you can skip (Screen Recording for the Live glass look, Camera for Intruder photo), one at a time. Each one deep-links to the right System Settings pane and checks itself off live as you grant it. Some grants only apply after a relaunch, so the wizard offers **Quit & Reopen** when needed.
 
 Why each permission is needed: [Permissions](/docs/permissions).
 
 ## 3. Cast your first ward
 
 1. Press **⌘⇧L** from anywhere, even while typing in your IDE, or choose **Activate Ward** from the menu-bar icon.
-2. The glass ward rises over the display you're working on. The screen stays readable; input is locked.
+2. The see-through "Input locked" screen rises over your displays. The screen stays readable; input is locked. Prefer the animated refracting glass? Pick **Live glass** in **Settings → Overview → Ward look**.
 3. Walk away. Your Mac stays awake, so the ward holds and your agent keeps running.
 
 ## 4. Unlock

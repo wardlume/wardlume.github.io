@@ -21,8 +21,8 @@ export const faq = [
     a: 'No. While the ward is up Wardlume holds a standard power assertion (the same mechanism as <code>caffeinate</code>), so the display and system don’t idle‑sleep. Closing the lid still ends the ward, on purpose.',
   },
   {
-    q: 'Is Wardlume safe? Why does it need Screen Recording?',
-    a: 'Screen Recording is how the glass shows your live desktop behind it, and Wardlume can’t send what it sees anywhere. <b>macOS blocks the app from the internet</b>: it’s sandboxed with no network entitlement. It captures only while the ward is up, straight to the GPU, and never saves frames. Check it yourself in <b>Settings → Privacy &amp; security</b>, or run <code>codesign -d --entitlements - /Applications/Wardlume.app</code>. See <a href="/privacy">Privacy</a> for how to read the result and confirm it with LuLu or Little Snitch.',
+    q: 'Is Wardlume safe? Does it need Screen Recording?',
+    a: '<b>No, not by default.</b> The default <b>Clear glass</b> ward is a see-through window: macOS draws your desktop beneath it and Wardlume never captures a pixel. Screen Recording is only for the optional <b>Live glass</b> look, and even then Wardlume can’t send what it sees anywhere. <b>macOS blocks the app from the internet</b>: it’s sandboxed with no network entitlement. Live glass captures only while the ward is up, straight to the GPU, and never saves frames. Check it yourself in <b>Settings → Privacy &amp; security</b>, or run <code>codesign -d --entitlements - /Applications/Wardlume.app</code>. See <a href="/privacy">Privacy</a> for how to read the result and confirm it with LuLu or Little Snitch.',
   },
   {
     q: 'Does Wardlume take photos of people?',

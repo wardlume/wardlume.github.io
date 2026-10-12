@@ -39,7 +39,7 @@ export const site = {
   // Top-of-home banner. `latest` describes the newest release (update it each
   // release); `always` is a standing highlight shown next to it on every release.
   banner: {
-    latest: 'Intruder photo',
+    latest: 'No screen recording needed',
     always: { icon: '⌚', text: 'Apple Watch unlock', since: 'v1.7', href: '/docs/unlocking#apple-watch' },
   },
 
