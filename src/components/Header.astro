@@ -1,5 +1,6 @@
 ---
-import { site } from '../site.config';
+import { site, pricing } from '../site.config';
+const sponsor = pricing.donate[0];
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const nav = [
   { href: '/#features', label: 'Features' },
@@ -29,7 +30,12 @@ const active = (href: string) => href !== '/#features' && path.startsWith(href);
       <button class="theme" type="button" aria-label="Toggle light and dark theme" title="Theme">
         <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9A9 9 0 0 0 12 3Zm0 16V5a7 7 0 0 1 0 14Z"/></svg>
       </button>
-      <a class="btn btn-primary dl" href="/download">Download</a>
+      {sponsor && (
+        <a class="btn sponsor" href={sponsor.href} aria-label={`${sponsor.label} — support Wardlume`}>
+          <svg class="heart" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12 21s-7.6-4.7-9.8-8.6C.4 9 2.2 5 6 5c2.2 0 3.6 1.2 4.5 2.4C11.4 6.2 12.8 5 15 5c3.8 0 5.6 4 3.8 7.4C16.6 16.3 12 21 12 21Z"/></svg>
+          Sponsor
+        </a>
+      )}
       <button class="menu" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mobile-nav">
         <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
       </button>
@@ -37,6 +43,7 @@ const active = (href: string) => href !== '/#features' && path.startsWith(href);
   </div>
   <nav id="mobile-nav" class="mobile" aria-label="Mobile" hidden>
     <ul class="container">
+      <li><a href="/download">Download</a></li>
       {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
       <li><a href={site.links.github}>GitHub</a></li>
     </ul>
@@ -85,9 +92,19 @@ const active = (href: string) => href !== '/#features' && path.startsWith(href);
     color: var(--muted); background: none; border: 0; cursor: pointer;
   }
   .gh:hover, .theme:hover, .menu:hover { color: var(--text); background: var(--surface); }
-  .dl { padding: 9px 16px; font-size: 0.88rem; margin-left: 4px; }
+  .sponsor {
+    padding: 9px 16px; font-size: 0.88rem; margin-left: 4px;
+    background: rgba(255, 84, 112, 0.14);
+    border-color: rgba(255, 84, 112, 0.45);
+    color: #ffb3c0;
+  }
+  .sponsor:hover { background: rgba(255, 84, 112, 0.22); border-color: rgba(255, 84, 112, 0.65); color: #ffd0d7; }
+  .sponsor .heart { color: #ff5470; }
+  :root[data-theme='light'] .sponsor { background: rgba(255, 84, 112, 0.08); border-color: rgba(194, 54, 82, 0.35); color: #b02a48; }
+  :root[data-theme='light'] .sponsor:hover { background: rgba(255, 84, 112, 0.14); color: #8f1f3a; }
   .mobile { border-top: 1px solid var(--border); background: var(--bg); }
-  .mobile ul { padding-top: 8px; padding-bottom: 12px; }
+  .mobile ul { padding: 8px 16px 12px; }
+  @media (min-width: 720px) { .mobile ul { padding-left: 32px; padding-right: 32px; } }
   .mobile a { display: block; padding: 10px 0; color: var(--text); font-weight: 500; }
   @media (max-width: 480px) { .gh { display: none; } }
   @media (min-width: 980px) {

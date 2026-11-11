@@ -1,5 +1,5 @@
 ---
-import { site } from '../site.config';
+import { site, pricing } from '../site.config';
 const year = new Date().getFullYear();
 const cols = [
   { title: 'Product', links: [
@@ -20,7 +20,7 @@ const cols = [
     { href: '/blog', label: 'Blog' },
     { href: site.links.github, label: 'GitHub' },
     { href: site.links.permissionPilot, label: 'PermissionPilot' },
-    { href: 'https://github.com/sponsors/arpitagarwal1301', label: 'Sponsor' },
+    { href: pricing.donate[0].href, label: 'Sponsor' },
   ]},
   { title: 'Legal', links: [
     { href: '/privacy', label: 'Privacy' },
