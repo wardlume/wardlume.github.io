@@ -8,7 +8,10 @@ const docs = defineCollection({
     title: z.string(),
     description: z.string(),
     order: z.number(),
-    icon: z.string().default('📄'),
+    /** A name from components/Icon.astro. */
+    icon: z.string().default('book'),
+    /** Two or three one-line takeaways, shown as “In short” above the article. */
+    summary: z.array(z.string()).optional(),
   }),
 });
 

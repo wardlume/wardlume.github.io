@@ -1,39 +1,44 @@
 ---
 import Base from '../layouts/Base.astro';
 import FAQ from '../components/FAQ.astro';
-import Cmd from '../components/Cmd.astro';
+import Icon from '../components/Icon.astro';
 import Email from '../components/Email.astro';
 import { site } from '../site.config';
 import { faq } from '../lib/faq';
 
+// Fixes for the most common problems (same wording as before the redesign,
+// with the FAQ's extra details folded in so nothing is said twice).
 const fixes = [
   {
-    t: 'The setup window opens instead of the ward',
-    d: 'Wardlume won’t cast a ward while a permission is missing, so it reopens the guided setup instead. macOS sometimes revokes permissions after an update: re-grant them in the setup window (or <b>System Settings → Privacy &amp; Security</b>), then use <b>Quit &amp; Reopen</b> when asked.',
-    link: { href: '/docs/permissions', label: 'Permissions guide' },
-  },
-  {
-    t: 'I’m stuck behind the ward',
-    d: 'Press your unlock shortcut (<kbd>⌘</kbd><kbd>⇧</kbd><kbd>U</kbd> by default) and use Touch ID or your password. As a last resort, <kbd>⌘</kbd><kbd>⌥</kbd><kbd>Esc</kbd> → Force Quit Wardlume always works; macOS reserves it.',
+    q: 'I’m stuck behind the ward',
+    a: 'Press your unlock shortcut (<kbd>⌘</kbd><kbd>⇧</kbd><kbd>U</kbd> by default) and use Touch ID, your Apple Watch, or your password. As a last resort, <kbd>⌘</kbd><kbd>⌥</kbd><kbd>Esc</kbd> → Force Quit Wardlume always works; macOS reserves it, so no app can block it. You can also enable an emergency‑exit key.',
     link: { href: '/safety', label: 'Safety guide' },
   },
   {
-    t: 'Apple Watch unlock doesn’t work',
-    d: 'Your watch must be on your wrist, unlocked, signed in to the same Apple Account, and enabled in <b>System Settings → Touch ID &amp; Password</b>. Then use <b>Settings → Lock &amp; unlock → Send test to watch</b>.',
+    q: 'The setup window opens instead of the ward',
+    a: 'Wardlume won’t cast a ward while a permission is missing, so it reopens the guided setup instead. macOS sometimes revokes permissions after an update: re-grant them in the setup window (or <b>System Settings → Privacy &amp; Security</b>), then use <b>Quit &amp; Reopen</b> when asked.',
+    link: { href: '/docs/permissions', label: 'Permissions guide' },
+  },
+  {
+    q: 'Apple Watch unlock doesn’t work',
+    a: 'Open <b>Settings → Lock &amp; unlock → Unlock with Apple Watch</b> and follow the setup steps. Your watch must be on your wrist, unlocked, have a passcode, be signed in to the same Apple Account, and be enabled in <b>System Settings → Touch ID &amp; Password</b>. Then use <b>Send test to watch</b>.',
     link: { href: '/docs/unlocking', label: 'Unlocking guide' },
   },
   {
-    t: 'macOS says “Wardlume is damaged”',
-    d: 'It isn’t; unnotarized downloads are quarantined. Install with Homebrew instead, or clear the flag once:',
+    q: 'macOS says “Wardlume is damaged”',
+    a: 'It isn’t; unnotarized downloads are quarantined. Install with Homebrew instead, or clear the flag once:',
     cmd: 'xattr -dr com.apple.quarantine /Applications/Wardlume.app',
   },
   {
-    t: '“The ward used Clear glass”',
-    d: 'You picked Live glass, but Screen Recording is off (or was turned off while you were away). The ward used the see-through Clear glass instead and stayed locked. Turn it back on in <b>System Settings → Privacy &amp; Security → Screen Recording</b>, or pick Clear glass in <b>Settings → Overview → Ward look</b>. On Wardlume 1.8 or earlier this showed as a “Ward Deactivated” alert.',
+    q: '“The ward used Clear glass”',
+    a: 'You picked Live glass, but Screen Recording is off (or was turned off while you were away). The ward used the see-through Clear glass instead and stayed locked. Turn it back on in <b>System Settings → Privacy &amp; Security → Screen Recording</b>, or pick Clear glass in <b>Settings → Overview → Ward look</b>. On Wardlume 1.8 or earlier this showed as a “Ward Deactivated” alert.',
   },
 ];
+
+// The full FAQ, minus the two questions the fixes above already answer.
+const questions = faq.filter((f) => !/get stuck|Apple Watch unlock/i.test(f.q));
 ---
-<Base title="Support & contact" description="Get help with Wardlume or get in touch: fixes for common issues, the FAQ, and email for licensing, press, and private questions.">
+<Base title="Support & contact" description="Get help with Wardlume or get in touch: quick fixes for common issues, and email for licensing, press, and private questions.">
   <div class="container page">
     <header class="intro">
       <span class="eyebrow">Support &amp; contact</span>
@@ -41,69 +46,85 @@ const fixes = [
       <p class="lead">Wardlume is built by one developer, and that person reads every message. Expect a human reply, not a ticket number.</p>
     </header>
 
-    <section id="contact" class="contact">
-      <h2>Get in touch</h2>
-      <div class="grid grid-3 channels">
-        {site.contactEmail && (
-          <div class="card channel">
-            <span class="ico">💼</span><h3>Business &amp; licensing</h3>
-            <p class="muted small">Commercial licenses, press, partnerships, or anything private. No GitHub account needed. Write to <Email subject="Wardlume" class="addr" />; I usually reply within 2–3 business days.</p>
-            <Email subject="Wardlume" label="Email me →" class="go small" />
+    <ul id="contact" class="paths">
+      {site.contactEmail && (
+        <li>
+          <Icon name="mail" />
+          <div>
+            <h3>Business &amp; licensing</h3>
+            <p>Commercial licenses, press, partnerships, or anything private. No GitHub account needed. Write to <Email subject="Wardlume" class="addr" />; I usually reply within 2–3 business days.</p>
           </div>
-        )}
-        <a class="card channel" href={site.links.issues}>
-          <span class="ico">🐛</span><h3>Report a bug</h3>
-          <p class="muted small">Something broken? Open a GitHub issue. Include your macOS version and Wardlume version (menu bar → Settings → Overview).</p>
-          <span class="go small">Open an issue →</span>
-        </a>
-        <a class="card channel" href={site.links.discussions}>
-          <span class="ico">💬</span><h3>Questions &amp; ideas</h3>
-          <p class="muted small">How-tos and feature requests live in GitHub Discussions, where answers help the next person too. No GitHub? Just email.</p>
-          <span class="go small">Start a discussion →</span>
-        </a>
+          <Email subject="Wardlume" label="Email me →" class="go" />
+        </li>
+      )}
+      <li>
+        <Icon name="bug" />
+        <div>
+          <h3>Report a bug</h3>
+          <p>Something broken? Open a GitHub issue. Include your macOS version and Wardlume version (menu bar → Settings → Overview).</p>
+        </div>
+        <a class="go" href={site.links.issues}>Open an issue →</a>
+      </li>
+      <li>
+        <Icon name="chat" />
+        <div>
+          <h3>Questions &amp; ideas</h3>
+          <p>How-tos and feature requests live in GitHub Discussions, where answers help the next person too. No GitHub? Just email.</p>
+        </div>
+        <a class="go" href={site.links.discussions}>Start a discussion →</a>
+      </li>
+      <li>
+        <Icon name="book" />
+        <div>
+          <h3>Docs</h3>
+          <p>Looking for how-tos? The docs cover setup, unlocking, automation, displays, and reactions.</p>
+        </div>
+        <a class="go" href="/docs">Read the docs →</a>
+      </li>
+    </ul>
+
+    <section class="fixes">
+      <div class="head">
+        <span class="eyebrow">Before you write in</span>
+        <h2>These fix most problems.</h2>
       </div>
-      <p class="small muted docs-hint">Looking for how-tos? The <a href="/docs">docs</a> cover setup, unlocking, automation, displays, and reactions.</p>
+      <FAQ items={fixes} />
     </section>
 
-    <section class="section-sm">
-      <h2>Before you write in</h2>
-      <p class="muted">These fix most problems.</p>
-      <div class="fixes">
-        {fixes.map((f) => (
-          <div class="card fix">
-            <h3>{f.t}</h3>
-            <p class="muted small" set:html={f.d} />
-            {f.cmd && <Cmd lines={f.cmd} />}
-            {f.link && <a class="small" href={f.link.href}>{f.link.label} →</a>}
-          </div>
-        ))}
+    <section class="fixes">
+      <div class="head">
+        <span class="eyebrow">FAQ</span>
+        <h2>Frequently asked.</h2>
       </div>
-    </section>
-
-    <section class="section-sm">
-      <h2 class="center">Frequently asked</h2>
-      <div class="mt"><FAQ items={faq} /></div>
+      <FAQ items={questions} />
     </section>
   </div>
 </Base>
 
 <style>
-  .page { padding-top: 56px; padding-bottom: 40px; }
-  .intro { max-width: 720px; margin-bottom: 36px; }
-  .channel { color: var(--text); transition: border-color 0.15s, transform 0.15s; }
-  .channel:hover { text-decoration: none; border-color: var(--accent); transform: translateY(-2px); }
-  .channel p { margin: 0 0 12px; }
-  .channel { display: flex; flex-direction: column; }
-  .channel .go, .channel :global(a.go) { margin-top: auto; color: var(--accent-2); font-weight: 600; }
-  .channel :global(.addr) { font-weight: 600; white-space: nowrap; }
-  .contact { scroll-margin-top: 88px; }
-  .contact h2 { font-size: 1.5rem; margin-bottom: 16px; }
-  .docs-hint { margin-top: 16px; }
-  .ico { font-size: 1.6rem; display: block; margin-bottom: 10px; }
-  .fixes { display: grid; gap: 12px; margin-top: 20px; }
-  @media (min-width: 860px) { .fixes { grid-template-columns: 1fr 1fr; } }
-  .fix h3 { margin-bottom: 6px; }
-  .fix p { margin-bottom: 10px; }
-  .fix :global(.cmd) { margin-bottom: 4px; }
-  .mt { margin-top: 24px; }
+  .page { padding-top: 56px; padding-bottom: 72px; }
+  .intro { max-width: 640px; margin-bottom: 32px; }
+  .intro .lead { margin-bottom: 0; }
+
+  .paths { list-style: none; margin: 0; padding: 0; display: grid; border-top: 1px solid var(--border-strong); scroll-margin-top: 96px; }
+  @media (min-width: 720px) { .paths { grid-template-columns: 1fr 1fr; column-gap: 40px; } }
+  @media (min-width: 1100px) { .paths { grid-template-columns: repeat(4, 1fr); column-gap: 28px; } }
+  .paths li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px 14px; align-items: start; padding: 18px 0; border-bottom: 1px solid var(--border); }
+  .paths li > :global(.go) { grid-column: 2; }
+  @media (min-width: 1100px) {
+    .paths li { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto; gap: 10px; padding: 22px 0 24px; border-bottom: 0; }
+    .paths li > :global(.go) { grid-column: 1; }
+  }
+  .paths :global(.icon) { color: var(--accent); margin-top: 2px; }
+  .paths h3 { font-size: 1rem; margin: 0 0 2px; }
+  .paths p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+  .paths :global(.addr) { font-weight: 600; white-space: nowrap; color: var(--text); }
+  .paths .go, .paths :global(a.go) { font-weight: 600; font-size: 0.92rem; white-space: nowrap; color: var(--accent); }
+
+  .fixes { margin-top: 64px; display: grid; gap: 24px; }
+  @media (min-width: 960px) { .fixes { grid-template-columns: 4fr 7fr; gap: 56px; margin-top: 88px; } .fixes .head { position: sticky; top: 104px; align-self: start; } }
+  .fixes .head { margin-bottom: 0; }
+  .fixes + .fixes { margin-top: 56px; }
+  .fixes .head p { margin: 8px 0 0; }
+  .fixes :global(kbd) { font: 600 0.8em var(--mono); background: var(--surface-2); border: 1px solid var(--border); border-radius: 5px; padding: 0.05em 0.35em; }
 </style>

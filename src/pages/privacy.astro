@@ -4,7 +4,40 @@ import { remoteMarkdown } from '../lib/remote-md';
 import { site } from '../site.config';
 // Rendered from the public repo's PRIVACY.md at build time. Edit it in the app repo, never here.
 const { title, html } = await remoteMarkdown('PRIVACY.md');
+
+// Keep the policy's one-line opener above the summary table.
+const cut = html.indexOf('</p>');
+const opener = cut > 0 ? html.slice(0, cut + 4) : '';
+const rest = cut > 0 ? html.slice(cut + 4) : html;
+
+const glance: [string, string][] = [
+  ['Personal data', 'None collected. No accounts, analytics, or servers.'],
+  ['Internet', 'The app has none; macOS enforces it. Only the separate updater goes online, to fetch signed updates.'],
+  ['Keyboard & mouse', 'Blocked while warded. Never logged.'],
+  ['Screen', 'Captured only for the optional Live glass look. Drawn live, never saved.'],
+  ['Camera', 'Only for the optional Intruder photo. Photos stay on your Mac and are deleted automatically.'],
+  ['Check it', 'Run the codesign command under “Verify it yourself”, or watch with LuLu or Little Snitch.'],
+];
 ---
 <Prose title={title} eyebrow="Legal" description="Wardlume is local-only: no servers, no analytics, no accounts." source={`${site.links.github}/blob/main/PRIVACY.md`}>
-  <Fragment set:html={html} />
+  <Fragment set:html={opener} />
+  <div class="glance">
+    <p class="label">At a glance</p>
+    <table>
+      <tbody>
+        {glance.map(([k, v]) => <tr><th scope="row">{k}</th><td>{v}</td></tr>)}
+      </tbody>
+    </table>
+  </div>
+  <Fragment set:html={rest} />
 </Prose>
+<style>
+  .glance { margin: 28px 0 40px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 6px 20px 8px; }
+  .glance .label { font: 600 0.72rem var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin: 14px 0 4px; }
+  .glance table { width: 100%; border-collapse: collapse; margin: 0; font-size: 0.95rem; }
+  .glance th, .glance td { text-align: left; vertical-align: top; padding: 10px 0; border: 0; border-top: 1px solid var(--border); background: none; }
+  .glance tr:first-child th, .glance tr:first-child td { border-top: 0; }
+  .glance th { width: 34%; padding-right: 16px; font-weight: 600; white-space: nowrap; }
+  .glance td { color: var(--muted); }
+  @media (max-width: 520px) { .glance th { white-space: normal; width: 38%; } }
+</style>

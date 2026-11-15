@@ -2,7 +2,11 @@
 title: Getting started
 description: Install Wardlume, finish the guided setup, and cast your first ward.
 order: 1
-icon: 🚀
+icon: rocket
+summary:
+  - "Install with Homebrew or the .pkg, then grant Accessibility and Input Monitoring in the setup window."
+  - "Press ⌘⇧L to cast the ward; your Mac stays awake behind it."
+  - "Unlock with Touch ID, Apple Watch or your password. ⌘⌥Esc → Force Quit always gets you out."
 ---
 
 Wardlume is a menu-bar app that locks your Mac's keyboard, mouse, and trackpad behind a see-through shield while everything on screen keeps running in view. It's made for **botsitting**: leaving an AI coding agent (Claude Code, Codex, Cursor, …) working while you step away.

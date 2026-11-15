@@ -2,7 +2,11 @@
 title: Intruder reactions
 description: Reaction packs, sounds, cooldown, and making the ward your own with custom images.
 order: 6
-icon: 🎭
+icon: mask
+summary:
+  - "Three packs: Silent Professional (default, no sound), Wizard and Grumpy Old Man."
+  - "Set the sound and a 1–10 second cooldown, and preview with Test reaction."
+  - "Add your own cover image, reaction image and sound (up to 10 MB each). They never leave your Mac."
 ---
 
 When someone touches a warded Mac, Wardlume can spring a reaction: an image that flashes for a moment, optionally with a sound. Configure it in **Settings → Intruder reactions**.

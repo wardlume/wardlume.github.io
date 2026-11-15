@@ -1,8 +1,12 @@
 ---
 title: Permissions
-description: The two macOS permissions Wardlume needs, the optional Screen Recording and camera, why each one is used, and how to fix them.
+description: Why Wardlume needs two permissions, what the two optional ones do, and how to fix them.
 order: 2
-icon: 🔐
+icon: key
+summary:
+  - "Required: Accessibility and Input Monitoring. Optional: Screen Recording (Live glass) and Camera (Intruder photo)."
+  - "Each is used only while warded. Nothing is recorded, logged or sent."
+  - "If macOS drops a permission, Wardlume reopens setup instead of casting a half-working ward."
 ---
 
 Wardlume needs **two** permissions, Accessibility and Input Monitoring. Screen Recording and Camera are **optional** and can be skipped in setup. Each is used **only while the ward is active**. Nothing is recorded, logged, or sent anywhere, and macOS blocks the app from the internet. See [Privacy & security](/docs/privacy-security) to verify it yourself.

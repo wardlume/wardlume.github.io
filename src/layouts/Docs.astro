@@ -2,8 +2,9 @@
 import Base from './Base.astro';
 import { getCollection } from 'astro:content';
 import { site } from '../site.config';
-interface Props { title: string; description: string; slug?: string; }
-const { title, description, slug } = Astro.props;
+import Icon from '../components/Icon.astro';
+interface Props { title: string; description: string; slug?: string; summary?: string[]; }
+const { title, description, slug, summary } = Astro.props;
 const docs = (await getCollection('docs')).sort((a, b) => a.data.order - b.data.order);
 const i = docs.findIndex((d) => d.id === slug);
 const prev = i > 0 ? docs[i - 1] : undefined;
@@ -17,10 +18,10 @@ const next = i >= 0 && i < docs.length - 1 ? docs[i + 1] : undefined;
         <ul>
           <li><a href="/docs" aria-current={!slug ? 'page' : undefined}>Overview</a></li>
           {docs.map((d) => (
-            <li><a href={`/docs/${d.id}`} aria-current={d.id === slug ? 'page' : undefined}><span>{d.data.icon}</span> {d.data.title}</a></li>
+            <li><a href={`/docs/${d.id}`} aria-current={d.id === slug ? 'page' : undefined}><Icon name={d.data.icon as any} size={16} /> {d.data.title}</a></li>
           ))}
-          <li class="sep"><a href="/safety">🛟 Safety guide</a></li>
-          <li><a href="/support">💬 Support</a></li>
+          <li class="sep"><a href="/safety"><Icon name="life-buoy" size={16} /> Safety guide</a></li>
+          <li><a href="/support"><Icon name="chat" size={16} /> Support</a></li>
         </ul>
       </details>
     </aside>
@@ -28,6 +29,12 @@ const next = i >= 0 && i < docs.length - 1 ? docs[i + 1] : undefined;
       <span class="eyebrow">Docs</span>
       <h1>{title}</h1>
       <p class="lead">{description}</p>
+      {summary && summary.length > 0 && (
+        <aside class="tldr" aria-label="In short">
+          <p class="tldr-label">In short</p>
+          <ul>{summary.map((s) => <li>{s}</li>)}</ul>
+        </aside>
+      )}
       <slot />
       {slug && (
         <nav class="pager" aria-label="Pagination">
@@ -39,17 +46,29 @@ const next = i >= 0 && i < docs.length - 1 ? docs[i + 1] : undefined;
     </article>
   </div>
 </Base>
+<script>
+  // Phones: start with the docs menu folded so the page itself comes first.
+  const nav = document.querySelector<HTMLDetailsElement>('.docs .nav');
+  if (nav && matchMedia('(max-width: 899px)').matches) nav.open = false;
+</script>
 <style>
   .docs { display: grid; gap: 32px; padding-top: 40px; padding-bottom: 40px; }
   @media (min-width: 900px) { .docs { grid-template-columns: 240px minmax(0, 1fr); gap: 56px; } }
   .side .nav { position: sticky; top: 88px; }
+  @media (max-width: 899px) { .side { border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px 2px; } .docs { gap: 24px; } }
   .nav summary { font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--faint); cursor: pointer; margin-bottom: 10px; }
   .nav ul { list-style: none; padding: 0; margin: 0; }
-  .nav a { display: flex; gap: 8px; padding: 7px 10px; border-radius: 8px; color: var(--muted); font-size: 0.93rem; }
+  .nav a { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 8px; color: var(--muted); font-size: 0.93rem; }
   .nav a:hover, .nav a[aria-current='page'] { background: var(--surface); color: var(--text); text-decoration: none; }
   .nav a[aria-current='page'] { box-shadow: inset 2px 0 0 var(--accent); }
+  .nav :global(.icon) { flex: none; opacity: 0.75; }
+  .nav a[aria-current='page'] :global(.icon) { color: var(--accent); opacity: 1; }
   .sep { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
   .body .lead { margin-bottom: 1.5em; }
+  .tldr { margin: 0 0 2em; padding: 14px 20px 16px; background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 12px; }
+  .tldr-label { font: 600 0.72rem var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+  .tldr ul { margin: 0; padding-left: 1.1em; }
+  .tldr li { margin: 0.3em 0; font-size: 0.95rem; color: var(--text); }
   .pager { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 48px; }
   .pager a { display: flex; flex-direction: column; gap: 4px; color: var(--text); font-weight: 600; padding: 16px; }
   .pager a:hover { border-color: var(--accent); text-decoration: none; }

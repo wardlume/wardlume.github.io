@@ -1,8 +1,12 @@
 ---
 title: Intruder photo
-description: Optionally photograph anyone who fails to unlock your Mac while it's warded. Off by default; photos never leave your Mac.
+description: Optionally photograph anyone who fails to unlock. Off by default; photos never leave your Mac.
 order: 6.2
-icon: 📷
+icon: camera
+summary:
+  - "Off by default. When on, one photo per failed unlock, never on a cancel or a plain touch."
+  - "Never covert: the camera light shows, and the glass warns that failed unlocks are photographed."
+  - "Photos stay on your Mac and are deleted after 30 days by default (7, 30 or 90)."
 ---
 
 **Intruder photo** takes one photo with your Mac's camera when someone **fails to unlock** while the ward is up. It's **off by default**, and macOS asks for camera access only when you turn it on.

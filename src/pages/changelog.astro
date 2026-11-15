@@ -4,7 +4,49 @@ import { remoteMarkdown } from '../lib/remote-md';
 import { site } from '../site.config';
 // Rendered from the public repo's CHANGELOG.md at build time. Edit it in the app repo, never here.
 const { title, html } = await remoteMarkdown('CHANGELOG.md');
+
+// The newest releases stay open; older ones fold into one line each.
+const OPEN = 3;
+const parts = html.split(/(?=<h2[ >])/);
+const intro = parts[0].startsWith('<h2') ? '' : parts.shift()!;
+const releases = parts.map((p) => {
+  const m = p.match(/^<h2[^>]*>([\s\S]*?)<\/h2>/);
+  const head = m ? m[1] : '';
+  const [name, date = ''] = head.split(/\s·\s(?=[^·]*$)/);
+  return { head, name, date, body: m ? p.slice(m[0].length) : p };
+});
+const latest = releases.slice(0, OPEN);
+const older = releases.slice(OPEN);
 ---
 <Prose title={title} eyebrow="Release notes" description="What's new in each Wardlume version: Apple Watch unlock, auto-ward when idle, multi-monitor support, and more." source={`${site.links.github}/blob/main/CHANGELOG.md`}>
-  <Fragment set:html={html} />
+  <Fragment set:html={intro} />
+  {latest.map((r) => (
+    <section class="rel">
+      <h2><Fragment set:html={r.name} />{r.date && <span class="date">{r.date}</span>}</h2>
+      <Fragment set:html={r.body} />
+    </section>
+  ))}
+  {older.length > 0 && (
+    <section class="older">
+      <h2>Earlier releases</h2>
+      {older.map((r) => (
+        <details>
+          <summary><span set:html={r.name} />{r.date && <span class="date">{r.date}</span>}</summary>
+          <div set:html={r.body} />
+        </details>
+      ))}
+    </section>
+  )}
 </Prose>
+<style>
+  .rel h2 { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+  .date { font: 500 0.78rem var(--mono); color: var(--faint); letter-spacing: 0.02em; }
+  .older { margin-top: 56px; }
+  .older details { border-top: 1px solid var(--border); }
+  .older details:last-child { border-bottom: 1px solid var(--border); }
+  .older summary { cursor: pointer; list-style: none; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 14px; padding: 14px 28px 14px 0; position: relative; font-weight: 600; }
+  .older summary::-webkit-details-marker { display: none; }
+  .older summary::after { content: '+'; position: absolute; right: 2px; top: 12px; color: var(--muted); font-size: 1.2rem; transition: transform 0.2s; }
+  .older details[open] summary::after { transform: rotate(45deg); }
+  .older details > div { padding-bottom: 12px; }
+</style>

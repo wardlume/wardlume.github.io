@@ -2,7 +2,11 @@
 title: Automation
 description: Launch at login, auto-ward when idle, and keeping your Mac awake.
 order: 4
-icon: ⏱️
+icon: timer
+summary:
+  - "Launch at login: on by default."
+  - "Auto-ward when idle: off by default, 1–15 minutes, with a 10-second countdown you can cancel."
+  - "Keep awake while warded: on by default. Closing the lid still sleeps the Mac and ends the ward."
 ---
 
 **Settings → Automation** controls what Wardlume does on its own.

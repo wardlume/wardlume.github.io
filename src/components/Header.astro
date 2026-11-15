@@ -36,6 +36,7 @@ const active = (href: string) => href !== '/#features' && path.startsWith(href);
           Sponsor
         </a>
       )}
+      <a class="btn btn-primary dl" href="/download">Download</a>
       <button class="menu" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mobile-nav">
         <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
       </button>
@@ -46,6 +47,7 @@ const active = (href: string) => href !== '/#features' && path.startsWith(href);
       <li><a href="/download">Download</a></li>
       {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
       <li><a href={site.links.github}>GitHub</a></li>
+      {sponsor && <li><a href={sponsor.href}>{sponsor.label}</a></li>}
     </ul>
   </nav>
 </header>
@@ -73,18 +75,18 @@ const active = (href: string) => href !== '/#features' && path.startsWith(href);
 <style>
   .site-header {
     position: sticky; top: 0; z-index: 50;
-    background: color-mix(in srgb, var(--bg) 78%, transparent);
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: saturate(1.4) blur(12px); -webkit-backdrop-filter: saturate(1.4) blur(12px);
     border-bottom: 1px solid var(--border);
   }
-  .bar { display: flex; align-items: center; gap: 24px; height: 64px; }
-  .brand { display: flex; align-items: center; gap: 10px; color: var(--text); font-weight: 700; font-size: 1.05rem; }
+  .bar { display: flex; align-items: center; gap: 28px; height: 64px; }
+  .brand { display: flex; align-items: center; gap: 10px; color: var(--text); font: 600 1.3rem/1 var(--serif); letter-spacing: -0.01em; }
   .brand:hover { text-decoration: none; }
   .brand img { border-radius: 7px; }
   nav ul { list-style: none; margin: 0; padding: 0; }
   .bar nav { display: none; }
   .bar nav ul { display: flex; gap: 4px; }
-  .bar nav a { color: var(--muted); padding: 8px 12px; border-radius: 8px; font-size: 0.93rem; font-weight: 500; }
+  .bar nav a { color: var(--muted); padding: 8px 11px; border-radius: 8px; font-size: 0.92rem; font-weight: 500; }
   .bar nav a:hover, .bar nav a[aria-current='page'] { color: var(--text); background: var(--surface); text-decoration: none; }
   .actions { margin-left: auto; display: flex; align-items: center; gap: 6px; }
   .gh, .theme, .menu {
@@ -92,16 +94,11 @@ const active = (href: string) => href !== '/#features' && path.startsWith(href);
     color: var(--muted); background: none; border: 0; cursor: pointer;
   }
   .gh:hover, .theme:hover, .menu:hover { color: var(--text); background: var(--surface); }
-  .sponsor {
-    padding: 9px 16px; font-size: 0.88rem; margin-left: 4px;
-    background: rgba(255, 84, 112, 0.14);
-    border-color: rgba(255, 84, 112, 0.45);
-    color: #ffb3c0;
-  }
-  .sponsor:hover { background: rgba(255, 84, 112, 0.22); border-color: rgba(255, 84, 112, 0.65); color: #ffd0d7; }
-  .sponsor .heart { color: #ff5470; }
-  :root[data-theme='light'] .sponsor { background: rgba(255, 84, 112, 0.08); border-color: rgba(194, 54, 82, 0.35); color: #b02a48; }
-  :root[data-theme='light'] .sponsor:hover { background: rgba(255, 84, 112, 0.14); color: #8f1f3a; }
+  .sponsor, .dl { min-height: 36px; padding: 8px 14px; font-size: 0.86rem; margin-left: 4px; }
+  .sponsor { background: transparent; border-color: var(--border-strong); color: var(--text); }
+  .sponsor:hover { background: var(--surface-2); }
+  .sponsor .heart { color: #d4405f; }
+  @media (max-width: 719px) { .sponsor { display: none; } }
   .mobile { border-top: 1px solid var(--border); background: var(--bg); }
   .mobile ul { padding: 8px 16px 12px; }
   @media (min-width: 720px) { .mobile ul { padding-left: 32px; padding-right: 32px; } }

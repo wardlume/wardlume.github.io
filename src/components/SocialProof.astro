@@ -1,7 +1,7 @@
 ---
 // Home-page download counter. 'count' animates up when scrolled into view;
-// 'laurel' is the award-style badge, kept for a future milestone (e.g. 1,000+).
-interface Props { variant: 'laurel' | 'count'; count: number; label?: string; }
+// 'laurel' is the award-style badge (home hero); 'inline' is one quiet line.
+interface Props { variant: 'laurel' | 'count' | 'inline'; count: number; label?: string; }
 const { variant, count, label = 'Macs warded' } = Astro.props;
 const shown = `${count.toLocaleString('en-US')}+`;
 
@@ -24,12 +24,16 @@ const leaves = [0.12, 0.3, 0.48, 0.66, 0.84].flatMap((t, k) => {
       <path class="stem" d={stem} />
       {leaves.map((l) => <path d="M0,0 C4,-5 4,-12 0,-17 C-4,-12 -4,-5 0,0Z" transform={`translate(${l.x} ${l.y}) rotate(${l.rot}) scale(${l.s})`} />)}
     </svg>
-    <div class="txt"><b>{shown}</b><span>{label}</span></div>
+    <div class="txt"><b data-count={count}>{shown}</b><span>{label}</span></div>
     <svg class="branch flip" viewBox="0 0 56 88" aria-hidden="true">
       <path class="stem" d={stem} />
       {leaves.map((l) => <path d="M0,0 C4,-5 4,-12 0,-17 C-4,-12 -4,-5 0,0Z" transform={`translate(${l.x} ${l.y}) rotate(${l.rot}) scale(${l.s})`} />)}
     </svg>
   </div>
+)}
+
+{variant === 'inline' && (
+  <p class="sp-inline"><b class="big" data-count={count}>{shown}</b> {label}</p>
 )}
 
 {variant === 'count' && (
@@ -43,7 +47,7 @@ const leaves = [0.12, 0.3, 0.48, 0.66, 0.84].flatMap((t, k) => {
 
 <script>
   // Count-up for the big number when it scrolls into view.
-  for (const el of document.querySelectorAll<HTMLElement>('.sp-count .big[data-count]')) {
+  for (const el of document.querySelectorAll<HTMLElement>('.sp-count .big[data-count], .sp-inline .big[data-count], .sp-laurel b[data-count]')) {
     const target = Number(el.dataset.count);
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) continue;
     const run = () => {
@@ -68,10 +72,15 @@ const leaves = [0.12, 0.3, 0.48, 0.66, 0.84].flatMap((t, k) => {
   .branch.flip { transform: scaleX(-1); }
   .sp-laurel .txt { display: flex; flex-direction: column; align-items: center; line-height: 1.05; }
   .sp-laurel b {
+    font-variant-numeric: tabular-nums;
     font-size: 2.2rem; font-weight: 800; letter-spacing: -0.03em;
     background: linear-gradient(90deg, var(--accent-2), var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent;
   }
   .sp-laurel span { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+
+  /* One line under the hero buttons */
+  .sp-inline { margin: 22px 0 0; display: flex; align-items: baseline; gap: 8px; color: var(--muted); font-size: 0.95rem; }
+  .sp-inline .big { font: 560 1.7rem/1 var(--serif); color: var(--text); letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
 
   /* Big count-up number */
   .sp-count { display: flex; flex-direction: column; align-items: center; margin: 34px auto 0; }

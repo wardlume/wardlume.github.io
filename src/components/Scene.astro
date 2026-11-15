@@ -1,0 +1,73 @@
+---
+// Small line illustrations for the home page's "things you won't say again"
+// cards. Drawn in the site's icon style (stroke = currentColor); `.a` marks the
+// accent strokes and `.f` the soft accent fills. Swap for real photos later by
+// replacing <Scene> with an <img> in index.astro.
+export type SceneName = 'cat' | 'cafe' | 'kid' | 'brush' | 'sleep' | 'coworker';
+interface Props { name: SceneName; label: string }
+const { name, label } = Astro.props;
+
+const laptop = (x: number, y: number, w: number, h: number) =>
+  `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="4"/><path d="M${x - 10} ${y + h + 4}h${w + 20}l-6 8H${x - 4}z"/>`;
+const paw = (x: number, y: number, s = 1) =>
+  `<g class="f a" transform="translate(${x} ${y}) scale(${s})"><ellipse cx="0" cy="3" rx="5" ry="4"/><circle cx="-5.5" cy="-3" r="2"/><circle cx="-1.8" cy="-6" r="2"/><circle cx="2.2" cy="-6" r="2"/><circle cx="5.8" cy="-3" r="2"/></g>`;
+
+const scenes: Record<SceneName, string> = {
+  cat: `
+    <rect x="18" y="56" width="124" height="34" rx="6"/>
+    <path d="M28 65h104M28 73h104M42 81h76" stroke-dasharray="7 4"/>
+    ${paw(48, 76, 0.9)}${paw(80, 66, 0.9)}${paw(112, 76, 0.9)}
+    <path class="a" d="M132 54c10-8 12-22 2-32"/>
+    <rect class="f a" x="24" y="14" width="78" height="24" rx="6"/>
+    <text x="34" y="30">migrate ✓</text>`,
+  cafe: `
+    ${laptop(58, 12, 84, 54)}
+    <text x="68" y="36">› hello?</text>
+    <path class="a" d="M68 44h40" stroke-dasharray="3 4"/>
+    <path d="M12 62h28v12a8 8 0 0 1-8 8H20a8 8 0 0 1-8-8z"/>
+    <path d="M40 66h3a5 5 0 0 1 0 10h-3"/>
+    <path class="a" d="M20 54c0-4 4-4 4-8M30 54c0-4 4-4 4-8"/>`,
+  kid: `
+    <rect x="52" y="44" width="56" height="42" rx="9"/>
+    <path d="M58 86v4h44v-4"/>
+    <text x="68" y="71" class="big">esc</text>
+    <path d="M73 2v28a7 7 0 0 0 14 0V2"/>
+    <path d="M76.5 29a3.5 3 0 0 0 7 0v-3h-7z"/>
+    <path class="a" d="M40 40l-8-6M120 40l8-6M42 58H30M118 58h12"/>
+    <rect class="f a" x="112" y="76" width="42" height="18" rx="5"/>
+    <text x="118" y="89">−40m</text>`,
+  brush: `
+    <rect x="42" y="48" width="76" height="44" rx="7"/>
+    <path class="a" d="M8 74c30-6 58-20 92-40" stroke-dasharray="2 5"/>
+    <rect x="60" y="12" width="24" height="30" rx="3"/>
+    <path d="M66 12V8h12v4M65 22h14M65 29h10"/>
+    <path class="a" d="M92 24l16-8"/>
+    <rect class="f a" x="110" y="6" width="44" height="20" rx="5"/>
+    <text x="119" y="20">prod</text>`,
+  sleep: `
+    ${laptop(40, 14, 84, 54)}
+    <rect x="52" y="38" width="60" height="9" rx="4.5"/>
+    <rect class="f a" x="52" y="38" width="34" height="9" rx="4.5"/>
+    <text x="52" y="31">train 61%</text>
+    <text x="128" y="22" class="a-t">z</text><text x="137" y="13" class="a-t">z</text>
+    <path class="a" d="M18 16a10 10 0 1 0 12 12 8 8 0 0 1-12-12z"/>`,
+  coworker: `
+    ${laptop(26, 14, 80, 52)}
+    <path class="a" d="M38 32h40M38 42h28" stroke-dasharray="3 4"/>
+    <circle cx="136" cy="44" r="11"/>
+    <path d="M114 92c2-16 10-26 22-26s20 10 22 26"/>
+    <path class="a" d="M118 78l-22 -4"/>
+    <rect class="f a" x="84" y="4" width="72" height="20" rx="5"/>
+    <text x="91" y="18">just a sec</text>`,
+};
+---
+<svg class="scene" viewBox="0 0 160 100" role="img" aria-label={label} set:html={scenes[name]} />
+
+<style>
+  .scene { display: block; width: 100%; height: auto; max-height: 132px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; color: var(--muted); }
+  .scene :global(.a) { stroke: var(--accent); }
+  .scene :global(.f) { fill: var(--accent-soft); }
+  .scene :global(text) { stroke: none; fill: var(--accent); font: 600 10px var(--mono); }
+  .scene :global(text.big) { fill: var(--text); font-size: 15px; }
+  .scene :global(text.a-t) { font: 600 12px var(--serif); }
+</style>
