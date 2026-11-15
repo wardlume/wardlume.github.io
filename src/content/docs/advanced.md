@@ -2,7 +2,11 @@
 title: Advanced & emergency exit
 description: The optional no-authentication emergency exit, and resetting all settings.
 order: 7
-icon: ⚠️
+icon: warning
+summary:
+  - "Updates: check daily (never while warded), and optionally install on quit."
+  - "Emergency exit (⌘⇧W) drops the ward with no authentication. Off by default; leave it off unless you need it."
+  - "Reset all restores defaults but keeps your custom assets and permissions."
 ---
 
 **Settings → Advanced** holds updates and the rarely needed options.

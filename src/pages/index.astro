@@ -2,9 +2,10 @@
 import Base from '../layouts/Base.astro';
 import GlassDemo from '../components/GlassDemo.astro';
 import Cmd from '../components/Cmd.astro';
-import InstallTabs from '../components/InstallTabs.astro';
 import FAQ from '../components/FAQ.astro';
 import SocialProof from '../components/SocialProof.astro';
+import Icon from '../components/Icon.astro';
+import Scene from '../components/Scene.astro';
 import { site } from '../site.config';
 import { faq } from '../lib/faq';
 import { latestRelease, formatDate, totalDownloads } from '../lib/release';
@@ -13,46 +14,51 @@ const r = await latestRelease();
 const downloads = (await totalDownloads()) + site.downloads.extra;
 const showDownloads = site.downloads.show && downloads >= site.downloads.minimum;
 
+const offer = 'Free for personal use';
+
+// The five questions that most often stand between a visitor and a download.
+// The full list lives on the Support page.
+const topFaq = faq.filter((f) => /lock screen|get stuck|Claude Code|safe\?|free\?/i.test(f.q));
+
 const plain = (html: string) => html.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&');
 const faqLd = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: faq.map((f) => ({
+  mainEntity: topFaq.map((f) => ({
     '@type': 'Question',
     name: f.q,
     acceptedAnswer: { '@type': 'Answer', text: plain(f.a) },
   })),
 };
 
-const useCases = [
-  { icon: '🤖', title: 'AI coding agents', text: 'Let Claude Code, Codex, or Cursor run for an hour without a stray keystroke landing in the prompt.' },
-  { icon: '🏗️', title: 'Builds, tests & training', text: 'Watch long builds, test suites, and ML runs finish with nobody poking at the keyboard.' },
-  { icon: '🎬', title: 'Renders & exports', text: 'No accidental clicks mid-export, and your Mac stays awake until it’s done.' },
-  { icon: '☕', title: 'A quick step away', text: 'Grab a coffee at the café. Come back to the exact same screen, still visibly working.' },
-];
-
-const features = [
-  { icon: '🛡️', title: 'Clear glass ward', text: 'A see-through “Input locked” screen over your live desktop. Hard-locked input, no screen recording needed. Optional animated Live glass is one click away.' },
-  { icon: '👆', title: 'Touch ID & Apple Watch unlock', text: 'Rest your finger, press your unlock shortcut, or double-press your watch’s side button. Falls back to your password.' },
-  { icon: '🎭', title: 'Intruder reactions', text: 'A wrong touch springs a reaction image and sound. Silent Professional, Wizard, Grumpy Old Man, or your own.' },
-  { icon: '📷', title: 'Intruder photo (optional)', text: 'Off by default. Photographs anyone who fails to unlock, with a notice on the glass. Photos never leave your Mac.' },
-  { icon: '☕', title: 'Keeps your Mac awake', text: 'No idle sleep while warded, so the ward holds and your agents keep running.' },
-  { icon: '⏱️', title: 'Auto-ward when idle', text: 'Optionally casts the ward after 1–15 minutes idle, with a 10-second countdown you cancel by moving the mouse.' },
-  { icon: '🖥️', title: 'Multi-display & unplug-safe', text: 'Other monitors stay visible but locked, or blacked out. Unplugging a monitor never unlocks.' },
-  { icon: '⌨️', title: 'Your shortcuts', text: 'Remap activate and unlock keys. Optional no-auth emergency exit for peace of mind.' },
-  { icon: '🔒', title: 'Local-only', text: 'No network, no analytics, no accounts. Nothing leaves your Mac.' },
-];
+// Playful scenarios, not testimonials.
+const scenes = [
+  { scene: 'cat', q: 'The cat walked across the keyboard and approved the migration.', who: 'a cat, probably' },
+  { scene: 'cafe', q: 'Someone at the café typed “hello?” into my agent’s prompt.', who: 'shared table, Tuesday' },
+  { scene: 'kid', q: 'My kid pressed Escape. Forty minutes of work, gone.', who: 'every parent who codes' },
+  { scene: 'brush', q: 'I brushed the trackpad and pasted my clipboard into prod.', who: 'a sleeve, allegedly' },
+  { scene: 'sleep', q: 'My Mac fell asleep and took the training run with it.', who: 'hour three of five' },
+  { scene: 'coworker', q: 'A coworker “just checked something” on my laptop.', who: 'open-plan office' },
+] as const;
 
 const compare = [
   ['Screen stays visible', true, false],
-  ['Agents, builds & renders keep going in view', true, false],
+  ['Agents keep working in view', true, false],
   ['Mac stays awake', true, false],
-  ['Blocks keyboard, mouse, trackpad & gestures', true, true],
-  ['Unlock with Touch ID or Apple Watch', true, true],
   ['Reacts when someone touches it', true, false],
-  ['Photographs failed unlocks (optional)', true, false],
-  ['Auto-locks when you walk away', true, true],
+  ['Blocks keyboard, mouse & gestures', true, true],
 ];
+
+const extras = [
+  { icon: 'camera', title: 'Intruder photo', text: 'Optional, off by default' },
+  { icon: 'eye', title: 'Keeps Mac awake', text: 'No idle sleep while warded' },
+  { icon: 'timer', title: 'Auto-ward', text: 'After 1–15 idle minutes' },
+  { icon: 'monitor', title: 'Every display', text: 'Unplugging never unlocks' },
+  { icon: 'key', title: 'Your shortcuts', text: 'Remap lock and unlock' },
+  { icon: 'wifi-off', title: 'Local only', text: 'No accounts, no analytics' },
+] as const;
+
+const appleLogo = 'M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.2 1-4 2.5-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.2-.8s1.9.8 3.2.8c1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8 0 0-2.6-1-2.6-4ZM14 5.4c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4Z';
 ---
 <Base
   exactTitle
@@ -60,132 +66,104 @@ const compare = [
   description="Free Mac app that locks your keyboard, mouse and trackpad while Claude Code, Codex or Cursor keep working in view. Unlock with Touch ID or Apple Watch."
   jsonLd={[faqLd]}
 >
-  <!-- Hero -->
+  <!-- 1. Hero: promise, proof, download; the working demo on the right -->
   <section class="hero">
-    <div class="glow" aria-hidden="true"></div>
-    <div class="container center">
-      <div class="pills">
-        <a class="pill" href="/changelog">
-          <span class="new">New</span> v{r.version}: {site.banner.latest} <span aria-hidden="true">→</span>
-        </a>
-        <a class="pill" href={site.banner.always.href}>
-          <span class="new soft">{site.banner.always.icon}</span> {site.banner.always.text} <span class="since">· since {site.banner.always.since}</span> <span aria-hidden="true">→</span>
-        </a>
+    <div class="container split middle">
+      <div class="hero-copy">
+        <div class="chips">
+          <a class="release" href="/changelog">
+            <span class="tag">New in v{r.version}</span> {site.banner.latest} <Icon name="arrow" size={14} />
+          </a>
+          <a class="release" href={site.banner.always.href}>
+            <span class="tag soft"><Icon name={site.banner.always.icon} size={13} /></span> {site.banner.always.text} <span class="since">· since {site.banner.always.since}</span> <Icon name="arrow" size={14} />
+          </a>
+        </div>
+        <h1>Lock the input.<br />Keep the work <em class="nowrap">in view.</em></h1>
+        <p class="lead">A glass ward over your Mac while Claude Code, Codex or Cursor keep working. Keys, clicks and gestures are blocked; Touch ID or your Apple Watch lets you back in.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/download">
+            <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="currentColor" d={appleLogo} /></svg>
+            Download for Mac
+          </a>
+          <a class="btn btn-ghost brew-btn" href="#install">Install with Homebrew</a>
+        </div>
+        <div class="hero-proof">
+          {showDownloads && <SocialProof variant={site.downloads.variant} count={downloads} />}
+          <p class="meta">{offer}<br />{site.requirements}{r.date && <><br />v{r.version}, {formatDate(r.date)}</>}</p>
+        </div>
       </div>
-      <p class="brandline">Wardlume for macOS</p>
-      <h1>Lock the input.<br /><span class="grad">Keep the work in view.</span></h1>
-      <p class="lead short">Your AI agents keep working in full view.<br />Nobody can touch your Mac.</p>
-      <div class="btn-row cta">
-        <a class="btn btn-primary" href="/download">
-          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.2 1-4 2.5-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.2-.8s1.9.8 3.2.8c1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8 0 0-2.6-1-2.6-4ZM14 5.4c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4Z"/></svg>
-          Download for Mac
-        </a>
-        <a class="btn btn-ghost" href={site.links.github}>View on GitHub</a>
+      <div class="hero-demo">
+        <GlassDemo />
       </div>
-      {showDownloads && <SocialProof variant={site.downloads.variant} count={downloads} />}
-      <div class="brew"><Cmd lines={site.brew.install} /></div>
-      <p class="meta small">
-        Free for personal use · v{r.version}{r.date && <> · {formatDate(r.date)}</>} · {site.requirements} · <a href={r.notesUrl}>release notes</a>
-      </p>
-    </div>
-
-    <div class="container demo-wrap">
-      <GlassDemo />
-      <p class="center small muted soon-note">🎬 Real screenshots and a demo video are coming soon. <a href="/roadmap">See the roadmap →</a></p>
     </div>
   </section>
 
-  <!-- Use cases -->
-  <section class="section">
+  <!-- 2. The pain, in one glance -->
+  <section class="section scenes-section">
     <div class="container">
-      <div class="center">
-        <span class="eyebrow">Use cases</span>
-        <h2>Step away. The work keeps going.</h2>
-        <p class="lead">For the gap between starting something long and coming back to finish it.</p>
+      <div class="head center-head">
+        <span class="eyebrow">Things you won’t say again</span>
+        <h2>You’ve lived at least one of these.</h2>
       </div>
-      <div class="grid grid-4 mt">
-        {useCases.map((u) => (
-          <div class="card">
-            <div class="ico">{u.icon}</div>
-            <h3>{u.title}</h3>
-            <p class="muted small">{u.text}</p>
-          </div>
+      <ul class="scenes">
+        {scenes.map((s) => (
+          <li>
+            <div class="art"><Scene name={s.scene} label={s.q} /></div>
+            <blockquote>{s.q}</blockquote>
+            <span class="who">— {s.who}</span>
+          </li>
         ))}
+      </ul>
+      <div class="mid-cta">
+        <a class="btn btn-primary" href="/download">Make it the last time <Icon name="arrow" size={16} /></a>
       </div>
     </div>
   </section>
 
-  <!-- How it works -->
-  <section class="section alt" id="how-it-works">
+  <!-- 3. How it works -->
+  <section class="section band" id="how-it-works">
     <div class="container">
-      <div class="center">
+      <div class="head">
         <span class="eyebrow">How it works</span>
-        <h2>One shortcut in. Touch ID out.</h2>
+        <h2>One shortcut in. Touch&nbsp;ID out.</h2>
       </div>
-      <ol class="steps mt">
-        <li class="glass">
-          <div class="keys"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>L</kbd></div>
-          <span class="num">01</span>
+      <ol class="steps">
+        <li>
+          <span class="step-key"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>L</kbd></span>
           <h3>Lock</h3>
-          <p class="muted">Press the shortcut from anywhere, even inside your IDE, or use the menu bar. The glass ward rises instantly.</p>
+          <p>From anywhere, even inside your editor.</p>
         </li>
-        <li class="glass">
-          <div class="keys big">🚶</div>
-          <span class="num">02</span>
+        <li>
+          <span class="step-key"><Icon name="walk" /></span>
           <h3>Step away</h3>
-          <p class="muted">Keys, clicks, scrolls and gestures are blocked on every display. The screen stays visible and your Mac stays awake.</p>
+          <p>Input blocked on every display. Screen stays on.</p>
         </li>
-        <li class="glass">
-          <div class="keys"><span class="big">👆</span> <span class="or">or</span> <kbd>⌘</kbd><kbd>⇧</kbd><kbd>U</kbd></div>
-          <span class="num">03</span>
+        <li>
+          <span class="step-key"><Icon name="fingerprint" /><Icon name="watch" /></span>
           <h3>Unlock</h3>
-          <p class="muted">Touch ID, Apple Watch, or your password. Everything is exactly where you left it.</p>
+          <p>Touch ID, Apple Watch or your password.</p>
         </li>
       </ol>
     </div>
   </section>
 
-  <!-- Features -->
+  <!-- 4. Why not just lock the screen? -->
   <section class="section" id="features">
-    <div class="container">
-      <div class="center">
-        <span class="eyebrow">Features</span>
-        <h2>Everything a ward should do.</h2>
-        <p class="lead">And a little mischief for anyone who tries to touch it.</p>
-      </div>
-      <div class="grid grid-3 mt">
-        {features.map((f) => (
-          <div class="card feature">
-            <div class="ico">{f.icon}</div>
-            <h3>{f.title}</h3>
-            <p class="muted small">{f.text}</p>
-          </div>
-        ))}
-      </div>
-
-      <div class="reactions mt">
-        <figure><img src="/img/reaction-wizard.jpg" alt="Wizard reaction pack: a glowering wizard" loading="lazy" width="1200" height="686" /><figcaption>Wizard pack</figcaption></figure>
-        <figure><img src="/img/reaction-grumpyOldMan.jpg" alt="Grumpy Old Man reaction pack: a stern stare" loading="lazy" width="1200" height="686" /><figcaption>Grumpy Old Man pack</figcaption></figure>
-      </div>
-    </div>
-  </section>
-
-  <!-- Comparison -->
-  <section class="section alt">
-    <div class="container">
-      <div class="center">
+    <div class="container split middle">
+      <div class="head">
         <span class="eyebrow">Why not just lock the screen?</span>
-        <h2>Wardlume vs the macOS lock screen</h2>
+        <h2>Your screen stays on. Your input doesn’t.</h2>
+        <p class="lead">The lock screen hides your work and lets your Mac sleep. Wardlume blocks only the hands, behind see-through Clear glass that needs no screen recording.</p>
       </div>
-      <div class="table-wrap mt">
+      <div class="table-card">
         <table class="compare">
-          <thead><tr><th></th><th>Wardlume</th><th>macOS lock screen</th></tr></thead>
+          <thead><tr><th><span class="sr">Feature</span></th><th>Wardlume</th><th>Lock screen</th></tr></thead>
           <tbody>
             {compare.map(([label, a, b]) => (
               <tr>
                 <td>{label}</td>
-                <td class={a ? 'yes' : 'no'}>{a ? '✓' : '—'}</td>
-                <td class={b ? 'yes' : 'no'}>{b ? '✓' : '—'}</td>
+                <td class={a ? 'yes' : 'no'}>{a ? <Icon name="check" size={18} label="Yes" /> : <span aria-label="No">—</span>}</td>
+                <td class={b ? 'yes dim' : 'no'}>{b ? <Icon name="check" size={18} label="Yes" /> : <span aria-label="No">—</span>}</td>
               </tr>
             ))}
           </tbody>
@@ -194,128 +172,196 @@ const compare = [
     </div>
   </section>
 
-  <!-- Safety + privacy -->
-  <section class="section">
-    <div class="container grid grid-2">
-      <div class="card big-card">
-        <span class="eyebrow">Safety first</span>
-        <h3>There’s always a way out.</h3>
-        <p class="muted">Touch ID, Apple Watch, your password, or <kbd>⌘</kbd><kbd>⌥</kbd><kbd>Esc</kbd> Force Quit, which macOS reserves so no app can block it. Sleep always ends the ward, and an optional emergency-exit key is one toggle away.</p>
-        <a href="/safety">Read the Safety guide →</a>
+  <!-- 5. Reactions: the fun part, image first -->
+  <section class="section band">
+    <div class="container split middle">
+      <div class="head">
+        <span class="eyebrow">Reactions</span>
+        <h2>A little mischief for whoever touches it.</h2>
+        <p class="lead">Wizard, Grumpy Old Man, Silent Professional, or your own image and sound.</p>
       </div>
-      <div class="card big-card">
-        <span class="eyebrow">Private by design</span>
-        <h3>Your screen can’t leave your Mac.</h3>
-        <p class="muted">macOS itself blocks Wardlume from the internet: it’s sandboxed with no network entitlement, which one Terminal command confirms. Frames are drawn live to the glass, never saved. Only the separate updater goes online, and only for signed updates.</p>
-        <a href="/privacy">See how to verify it →</a>
+      <div class="reactions">
+        <figure><img src="/img/reaction-wizard.jpg" alt="Wizard reaction pack: a glowering wizard" loading="lazy" width="1200" height="686" /><figcaption>Wizard</figcaption></figure>
+        <figure><img src="/img/reaction-grumpyOldMan.jpg" alt="Grumpy Old Man reaction pack: a stern stare" loading="lazy" width="1200" height="686" /><figcaption>Grumpy Old Man</figcaption></figure>
       </div>
     </div>
   </section>
 
-  <!-- Install -->
-  <section class="section alt" id="install">
-    <div class="container narrow">
-      <div class="center">
-        <span class="eyebrow">Install</span>
-        <h2>Ready in a minute.</h2>
-        <p class="lead">A guided setup walks you through two permissions on first launch. No screen recording needed.</p>
-      </div>
-      <div class="card mt"><InstallTabs /></div>
-    </div>
-  </section>
-
-  <!-- FAQ -->
-  <section class="section" id="faq">
-    <div class="container">
-      <div class="center">
-        <span class="eyebrow">FAQ</span>
-        <h2>Questions, answered.</h2>
-        <p class="lead">Something else? <a href="/support">Visit support</a>.</p>
-      </div>
-      <div class="mt"><FAQ items={faq} /></div>
-    </div>
-  </section>
-
-  <!-- Final CTA -->
+  <!-- 6. Also included -->
   <section class="section-sm">
     <div class="container">
-      <div class="final glass center">
+      <p class="eyebrow strip-label">Also included</p>
+      <ul class="extras">
+        {extras.map((f) => (
+          <li><Icon name={f.icon} /><b>{f.title}</b><span>{f.text}</span></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- 7. Trust: private and safe -->
+  <section class="section band">
+    <div class="container">
+      <div class="head">
+        <span class="eyebrow">Trust</span>
+        <h2>Private by design. Never a trap.</h2>
+      </div>
+      <div class="trust">
+        <div class="card">
+          <Icon name="wifi-off" />
+          <h3>Your screen can’t leave your Mac</h3>
+          <p>macOS itself blocks Wardlume from the internet: it’s sandboxed with no network entitlement. Only a separate updater goes online, for signed updates. Check it yourself:</p>
+          <Cmd lines="codesign -d --entitlements - /Applications/Wardlume.app" />
+          <a class="more-link" href="/privacy">How to read the result <Icon name="arrow" size={14} /></a>
+        </div>
+        <div class="card">
+          <Icon name="life-buoy" />
+          <h3>There’s always a way out</h3>
+          <p>Touch ID, Apple Watch, your password, or <kbd>⌘</kbd><kbd>⌥</kbd><kbd>Esc</kbd> Force Quit, which macOS reserves so no app can block it. Sleep always ends the ward.</p>
+          <a class="more-link" href="/safety">Safety guide <Icon name="arrow" size={14} /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. FAQ: the five questions that block a download -->
+  <section class="section" id="faq">
+    <div class="container split">
+      <div class="head sticky">
+        <span class="eyebrow">FAQ</span>
+        <h2>Before you trust it with your keyboard.</h2>
+        <p class="lead"><a href="/support">More questions on the support page</a>.</p>
+      </div>
+      <FAQ items={topFaq} />
+    </div>
+  </section>
+
+  <!-- 9. Final call to action, with Homebrew -->
+  <section class="section band" id="install">
+    <div class="container final">
+      <div class="final-copy">
         <h2>Cast your first ward.</h2>
-        <p class="lead">Free for personal use. If it saves your agent’s run, consider sponsoring its development.</p>
-        <div class="btn-row cta">
-          <a class="btn btn-primary" href="/download">Download Wardlume</a>
+        <p class="lead">Free for personal use. Ready in a minute: a guided setup asks for two permissions, no screen recording.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/download">
+            <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="currentColor" d={appleLogo} /></svg>
+            Download for Mac
+          </a>
           <a class="btn btn-ghost" href="/pricing">Support the project</a>
         </div>
+        {showDownloads && <SocialProof variant="inline" count={downloads} />}
+      </div>
+      <div class="final-brew">
+        <p class="brew-label">Or with Homebrew</p>
+        <Cmd lines={['brew tap arpitagarwal1301/tap', 'brew trust arpitagarwal1301/tap', 'brew install --cask wardlume']} />
+        <p class="small muted">{site.requirements} · <a href="/download">.pkg and .dmg</a></p>
       </div>
     </div>
   </section>
 </Base>
 
 <style>
-  .pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 28px; }
-  .pills .pill { margin-bottom: 0; }
-  .new.soft { background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent-2); padding: 3px 8px; }
+  /* 1. Hero */
+  .hero { padding: 36px 0 32px; }
+  @media (max-width: 559px) { .brew-btn { display: none; } .release { font-size: 0.82rem; } }
+  @media (min-width: 960px) {
+    .hero { padding: 64px 0 72px; }
+    .hero .split { grid-template-columns: minmax(0, 1fr) minmax(0, 1.18fr); gap: 56px; }
+    .hero h1 { font-size: clamp(3rem, 4.4vw, 4rem); }
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-bottom: 26px; }
+  .release { display: inline-flex; align-items: center; gap: 8px; font-size: 0.88rem; color: var(--muted); }
+  .release:hover { color: var(--text); text-decoration: none; }
+  .tag { white-space: nowrap; font: 600 0.7rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); padding: 5px 8px; border-radius: 6px; }
+  .tag.soft { display: inline-flex; padding: 3px 5px; }
   .since { color: var(--faint); }
-  .lead.short { max-width: 560px; }
-  .brandline { font-weight: 700; font-size: 1.05rem; letter-spacing: 0.01em; color: var(--muted); margin: 0 0 12px; }
-  .hero { position: relative; padding: 72px 0 40px; overflow: hidden; }
-  .glow {
-    position: absolute; inset: -20% -10% auto; height: 720px; pointer-events: none;
-    background: radial-gradient(50% 50% at 50% 30%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 70%);
-    filter: blur(20px); opacity: 0.8;
-  }
-  .hero .container { position: relative; }
-  .pill {
-    display: inline-flex; align-items: center; gap: 10px; padding: 6px 14px 6px 6px; border-radius: 999px;
-    background: var(--surface); border: 1px solid var(--border); color: var(--muted); font-size: 0.88rem; margin-bottom: 28px;
-  }
-  .pill:hover { text-decoration: none; color: var(--text); }
-  .new { background: var(--accent); color: var(--accent-ink); font-weight: 700; font-size: 0.72rem; padding: 4px 9px; border-radius: 999px; }
-  .grad { background: linear-gradient(90deg, var(--accent-2), var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .hero .lead { margin: 22px auto 30px; }
-  .cta { justify-content: center; }
-  .brew { max-width: 540px; margin: 22px auto 0; text-align: left; }
-  .meta { color: var(--faint); margin-top: 14px; }
-  .demo-wrap { margin-top: 56px; }
-  .soon-note { margin-top: 8px; }
+  .hero h1 { margin-bottom: 22px; }
+  .hero h1 em { color: var(--accent); }
+  .nowrap { white-space: nowrap; }
+  .hero .lead { margin: 0 0 30px; }
+  .hero-proof { display: flex; align-items: center; gap: 18px 22px; flex-wrap: wrap; margin-top: 26px; }
+  .hero-proof :global(.sp-laurel) { margin: 0; }
+  .hero-proof :global(.sp-laurel b) { font-size: 2.5rem; }
+  .meta { margin: 0; font-size: 0.82rem; line-height: 1.55; color: var(--faint); }
+  .hero-proof :global(.sp-laurel) + .meta { padding-left: 22px; border-left: 1px solid var(--border-strong); }
+  .hero-demo { min-width: 0; }
 
-  .mt { margin-top: 40px; }
-  .alt { background: var(--bg-2); border-block: 1px solid var(--border); }
-  .ico { font-size: 1.6rem; margin-bottom: 12px; }
-  .card h3 { margin-bottom: 6px; }
-  .card p { margin: 0; }
+  /* 2. Scenes */
+  .scenes-section { border-top: 1px solid var(--border); }
+  .center-head { margin-left: auto; margin-right: auto; text-align: center; max-width: 760px; }
+  .scenes { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  @media (min-width: 960px) { .scenes { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; } }
+  .scenes li { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 10px 12px; }
+  @media (min-width: 960px) { .scenes li { padding: 20px 22px 22px; } }
+  .art { background: var(--bg-2); border-radius: 10px; padding: 8px 6px; margin-bottom: 10px; }
+  @media (min-width: 960px) { .art { padding: 12px 10px; margin-bottom: 14px; } }
+  .scenes blockquote { margin: 0 0 8px; font: 500 0.92rem/1.28 var(--serif); letter-spacing: -0.01em; }
+  @media (min-width: 960px) { .scenes blockquote { font-size: 1.25rem; } }
+  .who { margin-top: auto; font: 0.68rem/1.3 var(--mono); color: var(--faint); }
+  @media (min-width: 960px) { .who { font-size: 0.72rem; } }
+  .mid-cta { display: flex; justify-content: center; margin-top: 32px; }
+  @media (min-width: 960px) { .mid-cta { margin-top: 44px; } }
 
-  .steps { list-style: none; padding: 0; display: grid; gap: 16px; }
-  @media (min-width: 860px) { .steps { grid-template-columns: repeat(3, 1fr); } }
-  .steps li { padding: 28px; position: relative; }
-  .steps .keys { display: flex; gap: 5px; align-items: center; min-height: 40px; margin-bottom: 18px; }
-  .steps kbd { font-size: 1rem; min-width: 2.1em; padding: 0.25em 0.5em; }
-  .steps .big { font-size: 1.8rem; }
-  .or { color: var(--faint); font-size: 0.85rem; margin: 0 4px; }
-  .num { position: absolute; top: 26px; right: 26px; color: var(--faint); font: 600 0.85rem var(--mono); }
-  .steps p { margin: 0; }
+  /* 3. Steps */
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0 32px; }
+  @media (min-width: 760px) { .steps { grid-template-columns: repeat(3, 1fr); } }
+  .steps li { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 16px; align-items: center; padding: 18px 0; border-top: 1px solid var(--border-strong); }
+  @media (min-width: 760px) { .steps li { grid-template-columns: 1fr; padding: 24px 0 8px; row-gap: 6px; } }
+  .step-key { grid-row: span 2; display: inline-flex; gap: 6px; align-items: center; color: var(--accent); min-width: 72px; font-size: 1.05rem; }
+  .step-key :global(.icon) { width: 30px; height: 30px; }
+  @media (min-width: 760px) { .step-key { grid-row: auto; margin-bottom: 12px; min-height: 36px; } }
+  .steps h3 { margin: 0; font-size: 1.15rem; }
+  .steps p { margin: 0; color: var(--muted); font-size: 0.95rem; }
 
-  .reactions { display: grid; gap: 16px; }
-  @media (min-width: 640px) { .reactions { grid-template-columns: 1fr 1fr; } }
-  .reactions figure { margin: 0; position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
-  .reactions img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
-  .reactions figcaption {
-    position: absolute; left: 12px; bottom: 12px; background: rgba(8,14,12,0.75); color: #eafff6;
-    padding: 6px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 600;
-  }
-
-  .table-wrap { max-width: 760px; margin-inline: auto; overflow-x: auto; }
-  .compare { width: 100%; border-collapse: collapse; }
-  .compare th, .compare td { padding: 14px 12px; border-bottom: 1px solid var(--border); text-align: center; }
-  .compare th:first-child, .compare td:first-child { text-align: left; }
-  .compare th { color: var(--muted); font-size: 0.85rem; font-weight: 600; }
+  /* 4. Compare table */
+  .table-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 4px 16px; overflow-x: auto; }
+  .compare { width: 100%; border-collapse: collapse; font-size: 0.9rem; line-height: 1.35; }
+  @media (min-width: 960px) { .compare { font-size: 0.98rem; } }
+  .compare th, .compare td { padding: 12px 6px; border-bottom: 1px solid var(--border); text-align: center; }
+  .compare tr:last-child td { border-bottom: 0; }
+  .compare th:first-child, .compare td:first-child { text-align: left; padding-left: 0; }
+  .compare th { color: var(--muted); font-size: 0.78rem; font-weight: 600; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.06em; }
   .compare th:nth-child(2) { color: var(--accent); }
-  .compare .yes { color: var(--accent); font-weight: 700; }
+  .compare td :global(.icon) { margin: 0 auto; color: var(--accent); stroke-width: 2.2; }
+  .compare .dim :global(.icon) { color: var(--faint); }
   .compare .no { color: var(--faint); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 
-  .big-card { padding: 32px; }
-  .big-card p { margin-bottom: 14px; }
-  .narrow { max-width: 760px; }
-  .final { padding: 56px 24px; }
-  .final .lead { margin: 12px auto 26px; }
+  /* 5. Reactions */
+  .reactions { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .reactions figure { margin: 0; }
+  .reactions img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--radius); border: 1px solid var(--border); }
+  .reactions figure:nth-child(2) { margin-top: 24px; }
+  @media (min-width: 960px) { .reactions figure:nth-child(2) { margin-top: 40px; } }
+  .reactions figcaption { margin-top: 10px; font: 600 0.75rem/1 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); }
+
+  /* 6. Also included */
+  .strip-label { display: block; margin-bottom: 14px; }
+  .extras { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 20px; border-top: 1px solid var(--border-strong); }
+  @media (min-width: 720px) { .extras { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 1100px) { .extras { grid-template-columns: repeat(6, 1fr); } }
+  .extras li { display: grid; grid-template-columns: 22px 1fr; column-gap: 10px; padding: 16px 0; border-bottom: 1px solid var(--border); }
+  @media (min-width: 1100px) { .extras li { border-bottom: 0; padding-top: 20px; } }
+  .extras :global(.icon) { color: var(--accent); grid-row: span 2; }
+  .extras b { font-size: 0.95rem; font-weight: 600; }
+  .extras span { font-size: 0.82rem; color: var(--muted); }
+
+  /* 7. Trust */
+  .trust { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .trust > * { min-width: 0; }
+  @media (min-width: 860px) { .trust { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; } }
+  .trust .card { display: flex; flex-direction: column; gap: 10px; padding: 24px; }
+  .trust .card > :global(.icon) { color: var(--accent); width: 26px; height: 26px; }
+  .trust h3 { margin: 4px 0 0; font-size: 1.15rem; }
+  .trust p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+  .more-link { display: inline-flex; align-items: center; gap: 6px; margin-top: auto; padding-top: 6px; font-weight: 600; font-size: 0.92rem; }
+
+  /* 9. Final CTA */
+  .final { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .final > * { min-width: 0; }
+  @media (min-width: 960px) { .final { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 56px; align-items: center; } }
+  .final .lead { margin: 0 0 24px; }
+  .final-copy :global(.sp-inline) { margin-top: 20px; }
+  .brew-label { font: 600 0.72rem var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); margin: 0 0 10px; }
+  .final-brew .small { margin: 12px 0 0; }
 </style>

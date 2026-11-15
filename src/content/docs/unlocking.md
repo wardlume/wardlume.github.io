@@ -2,7 +2,11 @@
 title: Locking & unlocking
 description: Shortcuts, Touch ID, Apple Watch unlock and its setup, and your password.
 order: 3
-icon: 👆
+icon: fingerprint
+summary:
+  - "⌘⇧L casts or drops the ward, ⌘⇧U unlocks. Both can be changed; Touch ID always works."
+  - "Apple Watch: tap any key, then double-press the side button. Same Apple Account, on your wrist, unlocked."
+  - "A stranger’s touch only ever asks your watch, so they can’t use up your Touch ID tries."
 ---
 
 Everything here lives in **Settings → Lock & unlock**.

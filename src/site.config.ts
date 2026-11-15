@@ -40,13 +40,14 @@ export const site = {
   // release); `always` is a standing highlight shown next to it on every release.
   banner: {
     latest: 'No screen recording needed',
-    always: { icon: '⌚', text: 'Apple Watch unlock', since: 'v1.7', href: '/docs/unlocking#apple-watch' },
+    always: { icon: 'watch' as const, text: 'Apple Watch unlock', since: 'v1.7', href: '/docs/unlocking#apple-watch' },
   },
 
   // Home-page "Macs warded" counter: every GitHub release download (website,
   // Homebrew, in-app updates), refreshed hourly. `extra` is for copies shared outside GitHub; only add an
-  // accurate, documented number. `variant` 'laurel' is for a future milestone.
-  downloads: { show: true, variant: 'count' as 'count' | 'laurel', extra: 0, minimum: 1 },
+  // accurate, documented number. `variant` is the hero style: 'laurel' (award
+  // badge), 'count' (big centered number) or 'inline' (one quiet line).
+  downloads: { show: true, variant: 'laurel' as 'inline' | 'count' | 'laurel', extra: 0, minimum: 1 },
 
   // Search engine ownership tokens (Google Search Console / Bing Webmaster Tools).
   // Paste the content="…" value of each verification meta tag here.

@@ -2,7 +2,11 @@
 title: Update & uninstall
 description: Keep Wardlume up to date, or remove it cleanly.
 order: 8
-icon: 🧹
+icon: refresh
+summary:
+  - "Since 1.7.4 Wardlume updates itself; brew upgrade works too."
+  - "To uninstall: turn off Launch at login, quit, then brew uninstall --cask wardlume or drag it to the Trash."
+  - "Settings and permissions carry over between versions."
 ---
 
 ## Update

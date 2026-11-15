@@ -1,8 +1,12 @@
 ---
 title: Privacy & security
-description: What Wardlume can and can't access, how to verify that it can't reach the internet, and how updates work.
+description: What Wardlume can reach, how to verify it can't go online, and how updates work.
 order: 6.5
-icon: 🛡️
+icon: shield
+summary:
+  - "The app can’t reach the internet: macOS blocks it, with no network entitlement."
+  - "No screen capture by default, no recordings saved, camera off unless you turn on Intruder photo."
+  - "Only the separate, sandboxed updater goes online, and it sends nothing about you."
 ---
 
 **Settings → Privacy & security** shows what Wardlume can reach. It reads these facts live from the app itself. You can also open it from the **Privacy ›** button at the top of Overview.

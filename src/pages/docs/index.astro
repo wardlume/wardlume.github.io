@@ -1,22 +1,29 @@
 ---
 import Docs from '../../layouts/Docs.astro';
+import Icon from '../../components/Icon.astro';
 import { getCollection } from 'astro:content';
 const docs = (await getCollection('docs')).sort((a, b) => a.data.order - b.data.order);
 ---
-<Docs title="Wardlume documentation" description="Everything you need to set up Wardlume, unlock it your way, and tune how it behaves.">
-  <div class="list">
+<Docs title="Wardlume documentation" description="Set it up, unlock it your way, and tune how it behaves.">
+  <ul class="list">
     {docs.map((d) => (
-      <a class="card item" href={`/docs/${d.id}`}>
-        <span class="ico">{d.data.icon}</span>
-        <span><b>{d.data.title}</b><br /><span class="small muted">{d.data.description}</span></span>
-      </a>
+      <li>
+        <a href={`/docs/${d.id}`}>
+          <Icon name={d.data.icon as any} />
+          <span><b>{d.data.title}</b><span class="d">{d.data.description}</span></span>
+        </a>
+      </li>
     ))}
-  </div>
+  </ul>
 </Docs>
 <style>
-  .list { display: grid; gap: 12px; }
-  @media (min-width: 700px) { .list { grid-template-columns: 1fr 1fr; } }
-  .item { display: flex; gap: 14px; align-items: flex-start; color: var(--text); padding: 18px; }
-  .item:hover { border-color: var(--accent); text-decoration: none; }
-  .ico { font-size: 1.4rem; line-height: 1.2; }
+  .list { list-style: none; margin: 0; padding: 0; display: grid; border-top: 1px solid var(--border-strong); }
+  @media (min-width: 760px) { .list { grid-template-columns: 1fr 1fr; column-gap: 32px; } }
+  .list li { border-bottom: 1px solid var(--border); margin: 0; }
+  .list a { display: flex; gap: 14px; align-items: flex-start; padding: 16px 4px; color: var(--text); }
+  .list a:hover { text-decoration: none; }
+  .list a:hover b { color: var(--accent); }
+  .list :global(.icon) { color: var(--accent); margin-top: 1px; }
+  .list b { display: block; font-weight: 600; }
+  .d { display: block; color: var(--muted); font-size: 0.9rem; line-height: 1.45; margin-top: 2px; }
 </style>
