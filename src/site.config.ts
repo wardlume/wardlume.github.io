@@ -108,7 +108,7 @@ export const pricing: {
     macs: 2,
     trialHours: 48,
     refundDays: 7,
-    checkoutURL: '',
+    checkoutURL: 'https://wardlume.lemonsqueezy.com/checkout/buy/5ba1e881-1a59-439b-ae86-92a3f8e4f19f',
     features: [
       'The see-through ward on every display',
       'Touch ID, password & Apple Watch unlock',
