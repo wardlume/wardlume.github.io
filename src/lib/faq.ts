@@ -1,4 +1,7 @@
 // Shared FAQ copy (home page + support page). Keep in step with the README FAQ.
+import { pricing } from '../site.config';
+const paid = pricing.mode === 'paid';
+
 export const faq = [
   {
     q: 'Is my screen hidden while warded?',
@@ -37,8 +40,10 @@ export const faq = [
     a: 'Open <b>Settings → Lock &amp; unlock → Unlock with Apple Watch</b> and follow the setup steps. Your watch has to be signed in to the same Apple Account, have a passcode, be on your wrist and unlocked, and be enabled in <b>System Settings → Touch ID &amp; Password</b>. Then press <b>Send test to watch</b>.',
   },
   {
-    q: 'Is it free?',
-    a: 'Yes, for any <b>noncommercial</b> use (personal, study, hobby, nonprofit). Commercial use needs a license. See <a href="/pricing">Pricing</a> and <a href="/terms">Terms</a>.',
+    q: paid ? 'How much does it cost?' : 'Is it free?',
+    a: paid
+      ? `Try every feature free for ${pricing.paid.trialHours} hours, then buy once: ${pricing.paid.price} for up to ${pricing.paid.macs} Macs, every update included, with ${pricing.paid.refundDays}-day refunds. See <a href="/pricing">Pricing</a>.`
+      : 'Yes, for any <b>noncommercial</b> use (personal, study, hobby, nonprofit). Commercial use needs a license. See <a href="/pricing">Pricing</a> and <a href="/terms">Terms</a>.',
   },
   {
     q: 'How do I uninstall?',

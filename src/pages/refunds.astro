@@ -1,0 +1,22 @@
+---
+import Prose from '../layouts/Prose.astro';
+import { remoteMarkdown } from '../lib/remote-md';
+import { site, pricing } from '../site.config';
+// Rendered from the public repo's REFUNDS.md at build time. Edit it in the app repo
+// (docs/public/REFUNDS.md), never here. Until the first release that syncs it, a
+// short summary from site.config stands in.
+const p = pricing.paid;
+let doc: { title: string; html: string } | null = null;
+try { doc = await remoteMarkdown('REFUNDS.md'); } catch { doc = null; }
+---
+<Prose title={doc?.title ?? 'Refund Policy'} eyebrow="Legal"
+  description={`Full refund within ${p.refundDays} days of buying Wardlume, no questions asked.`}
+  source={doc ? `${site.links.github}/blob/main/REFUNDS.md` : undefined}
+  noindex={pricing.mode !== 'paid'}>
+  {doc ? <Fragment set:html={doc.html} /> : (
+    <>
+      <p><strong>Changed your mind? You get a full refund within {p.refundDays} days of buying, with no questions asked.</strong></p>
+      <p>Reply to your purchase receipt, or write to us through the <a href="/support#contact">contact page</a> with the email you bought with. Refunds go back to the original payment method, usually within 5–10 business days.</p>
+    </>
+  )}
+</Prose>

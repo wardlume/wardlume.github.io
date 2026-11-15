@@ -10,6 +10,7 @@ const LOCAL_LINKS: Record<string, string> = {
   'CHANGELOG.md': '/changelog',
   'PRIVACY.md': '/privacy',
   'TERMS.md': '/terms',
+  'REFUNDS.md': '/refunds',
   'LICENSE': `https://github.com/${site.repo}/blob/main/LICENSE`,
 };
 
@@ -24,7 +25,7 @@ export async function remoteMarkdown(file: string): Promise<{ title: string; htm
   if (m) md = md.slice(m[0].length);
 
   // Repo-relative links → site pages.
-  md = md.replace(/\]\((SAFETY\.md|CHANGELOG\.md|PRIVACY\.md|TERMS\.md|LICENSE)(#[^)]*)?\)/g,
+  md = md.replace(/\]\((SAFETY\.md|CHANGELOG\.md|PRIVACY\.md|TERMS\.md|REFUNDS\.md|LICENSE)(#[^)]*)?\)/g,
     (_, f, hash = '') => `](${LOCAL_LINKS[f]}${hash})`);
 
   return { title, html: await marked.parse(md) };

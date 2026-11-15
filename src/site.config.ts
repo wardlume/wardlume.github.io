@@ -59,23 +59,31 @@ export const site = {
   analytics: { goatcounter: '' },
 } as const;
 
-export type Tier = {
-  name: string;
-  price: string;
-  cadence?: string;
-  blurb: string;
-  features: string[];
-  cta: { label: string; href: string };
-  highlight?: boolean;
-};
-
 // mode 'free'  → personal use free, donations + commercial-license contact.
-// mode 'paid'  → renders `tiers` with hosted checkout links (Polar / Lemon Squeezy).
+// mode 'paid'  → Wardlume Pro: trial, one-time price, Lemon Squeezy checkout,
+//                refund policy. Flip when v2.0 (licensing) ships.
 export const pricing: {
   mode: 'free' | 'paid';
   donate: { label: string; href: string; note: string }[];
   commercial: { label: string; href: string };
-  tiers: Tier[];
+  paid: {
+    product: string;
+    plan: string;
+    /** What people pay now. */
+    price: string;
+    /** Shown struck through next to `price`; '' hides it. */
+    listPrice: string;
+    /** e.g. 'Launch price'; '' hides the label. */
+    saleLabel: string;
+    /** e.g. 'Jan 31' → "Launch price until Jan 31"; '' for no end date. */
+    saleEnds: string;
+    macs: number;
+    trialHours: number;
+    refundDays: number;
+    /** Lemon Squeezy checkout link. Empty → Buy points at the contact page. */
+    checkoutURL: string;
+    features: string[];
+  };
 } = {
   mode: 'free',
   donate: [
@@ -90,5 +98,25 @@ export const pricing: {
     label: 'Ask about a commercial license',
     href: 'https://github.com/arpitagarwal1301/wardlume/discussions',
   },
-  tiers: [],
+  paid: {
+    product: 'Wardlume Pro',
+    plan: 'Lifetime',
+    price: '$19',
+    listPrice: '$29',
+    saleLabel: 'Launch price',
+    saleEnds: '',
+    macs: 2,
+    trialHours: 48,
+    refundDays: 7,
+    checkoutURL: '',
+    features: [
+      'The see-through ward on every display',
+      'Touch ID, password & Apple Watch unlock',
+      'Live glass look',
+      'Intruder photo of failed unlocks',
+      'Auto-ward when you go idle',
+      'Character reaction packs',
+      'Every future update',
+    ],
+  },
 };

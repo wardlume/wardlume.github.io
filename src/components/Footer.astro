@@ -25,6 +25,7 @@ const cols = [
   { title: 'Legal', links: [
     { href: '/privacy', label: 'Privacy' },
     { href: '/terms', label: 'Terms' },
+    ...(pricing.mode === 'paid' ? [{ href: '/refunds', label: 'Refunds' }] : []),
     { href: `https://github.com/${site.repo}/blob/main/LICENSE`, label: 'License' },
   ]},
 ];

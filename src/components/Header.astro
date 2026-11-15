@@ -1,6 +1,7 @@
 ---
 import { site, pricing } from '../site.config';
-const sponsor = pricing.donate[0];
+const sponsor = pricing.mode === 'paid' ? undefined : pricing.donate[0];
+const buy = pricing.mode === 'paid' ? pricing.paid : undefined;
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const nav = [
   { href: '/#features', label: 'Features' },
@@ -35,6 +36,9 @@ const active = (href: string) => href !== '/#features' && path.startsWith(href);
           <svg class="heart" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12 21s-7.6-4.7-9.8-8.6C.4 9 2.2 5 6 5c2.2 0 3.6 1.2 4.5 2.4C11.4 6.2 12.8 5 15 5c3.8 0 5.6 4 3.8 7.4C16.6 16.3 12 21 12 21Z"/></svg>
           Sponsor
         </a>
+      )}
+      {buy && (
+        <a class="btn btn-primary buy" href="/pricing">Buy · {buy.price}</a>
       )}
       <button class="menu" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mobile-nav">
         <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
@@ -102,6 +106,7 @@ const active = (href: string) => href !== '/#features' && path.startsWith(href);
   .sponsor .heart { color: #ff5470; }
   :root[data-theme='light'] .sponsor { background: rgba(255, 84, 112, 0.08); border-color: rgba(194, 54, 82, 0.35); color: #b02a48; }
   :root[data-theme='light'] .sponsor:hover { background: rgba(255, 84, 112, 0.14); color: #8f1f3a; }
+  .buy { padding: 9px 16px; font-size: 0.88rem; margin-left: 4px; box-shadow: none; }
   .mobile { border-top: 1px solid var(--border); background: var(--bg); }
   .mobile ul { padding: 8px 16px 12px; }
   @media (min-width: 720px) { .mobile ul { padding-left: 32px; padding-right: 32px; } }

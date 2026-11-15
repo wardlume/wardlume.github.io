@@ -5,7 +5,7 @@ import Cmd from '../components/Cmd.astro';
 import InstallTabs from '../components/InstallTabs.astro';
 import FAQ from '../components/FAQ.astro';
 import SocialProof from '../components/SocialProof.astro';
-import { site } from '../site.config';
+import { site, pricing } from '../site.config';
 import { faq } from '../lib/faq';
 import { latestRelease, formatDate, totalDownloads } from '../lib/release';
 
@@ -57,7 +57,9 @@ const compare = [
 <Base
   exactTitle
   title="Wardlume: lock your Mac's keyboard & mouse while AI agents run"
-  description="Free Mac app that locks your keyboard, mouse and trackpad while Claude Code, Codex or Cursor keep working in view. Unlock with Touch ID or Apple Watch."
+  description={pricing.mode === 'paid'
+    ? "Mac app that locks your keyboard, mouse and trackpad while Claude Code, Codex or Cursor keep working in view. Unlock with Touch ID or Apple Watch. Free trial."
+    : "Free Mac app that locks your keyboard, mouse and trackpad while Claude Code, Codex or Cursor keep working in view. Unlock with Touch ID or Apple Watch."}
   jsonLd={[faqLd]}
 >
   <!-- Hero -->
