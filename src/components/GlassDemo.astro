@@ -78,6 +78,13 @@ const packs = [
     '✳ Working… (41m 12s · still going)',
   ];
 
+  const REACTIONS = { wizard: '/img/reaction-wizard.jpg', grumpy: '/img/reaction-grumpyOldMan.jpg' };
+  // Fetch the reaction images in the background once the page has loaded, so
+  // the first touch on the demo shows the picture straight away.
+  const preload = () => Object.values(REACTIONS).forEach((src) => { new Image().src = src; });
+  if (document.readyState === 'complete') setTimeout(preload, 300);
+  else addEventListener('load', () => setTimeout(preload, 300), { once: true });
+
   for (const demo of document.querySelectorAll<HTMLElement>('.demo')) {
     const mac = demo.querySelector<HTMLElement>('.mac')!;
     const term = demo.querySelector<HTMLElement>('.term')!;
@@ -89,6 +96,8 @@ const packs = [
     let attempts = 0;
     let wardedAt = 0;
     let hideTimer = 0;
+    let showToken = 0;
+    let hold = false; // ?demo=…: keep the reaction on screen
 
     // The agent keeps typing whether or not the ward is up.
     let li = 6, ci = 0, buf: string[] = LINES.slice(0, 6);
@@ -103,13 +112,21 @@ const packs = [
     if (reduced) term.textContent = LINES.slice(0, 11).join('\n');
     else tick();
 
+    let previewTimer = 0;
+
     const set = (s: 'idle' | 'warded') => {
       demo.dataset.state = s;
+      clearTimeout(previewTimer);
       if (s === 'warded') {
         attempts = 0;
         wardedAt = performance.now();
         status.innerHTML = 'Warded. The agent keeps working. <b>Try clicking or typing</b> on the screen, then use <b>Touch ID</b> to get back in.';
+        // Visitors rarely think to touch the screen, so play the chosen
+        // reaction once by itself shortly after the ward rises.
+        if (!hold) previewTimer = window.setTimeout(preview, 650);
       } else {
+        clearTimeout(hideTimer);
+        demo.classList.remove('react', 'nope-on');
         status.innerHTML = attempts
           ? `Unlocked. The ward blocked <b>${attempts}</b> attempt${attempts === 1 ? '' : 's'}; the agent never noticed.`
           : 'Unlocked. Everything is exactly where you left it.';
@@ -122,23 +139,48 @@ const packs = [
       demo.dataset.pack = id;
       demo.querySelectorAll('.packs button').forEach((x) =>
         x.setAttribute('aria-checked', String((x as HTMLElement).dataset.pack === id)));
+      // Switching packs while warded shows the new one straight away.
+      if (demo.dataset.state === 'warded' && !hold) { clearTimeout(previewTimer); preview(); }
+    }
+
+    /** Flash the current pack's reaction for `ms`. Visuals only. */
+    function playReaction(ms: number) {
+      const pack = demo.dataset.pack;
+      clearTimeout(hideTimer);
+      demo.classList.remove('react', 'nope-on');
+      if (pack === 'wizard' || pack === 'grumpy') {
+        const src = REACTIONS[pack];
+        if (reaction.getAttribute('src') !== src) reaction.src = src;
+        // Show it only once the picture is ready, then for the full time:
+        // on a first touch over a slow connection the image may still be loading.
+        const shown = ++showToken, keep = hold;
+        const show = () => {
+          if (shown !== showToken || demo.dataset.state !== 'warded') return;
+          demo.classList.add('react');
+          clearTimeout(hideTimer);
+          if (!keep) hideTimer = window.setTimeout(() => demo.classList.remove('react'), ms);
+        };
+        if (reaction.complete && reaction.naturalWidth) show();
+        else reaction.decode().then(show, show);
+      } else {
+        ++showToken;
+        demo.classList.add('nope-on');
+        hideTimer = window.setTimeout(() => demo.classList.remove('nope-on'), Math.min(ms, 1600));
+      }
+    }
+
+    /** The demo plays the reaction by itself; not counted as an attempt. */
+    function preview() {
+      if (demo.dataset.state !== 'warded') return;
+      playReaction(2000);
+      status.innerHTML = 'This is what anyone who touches your Mac sees. <b>Try it</b>: click or type on the screen, then use <b>Touch ID</b> to get back in.';
     }
 
     const intrude = () => {
       attempts++;
-      const pack = demo.dataset.pack;
-      const img = demo.querySelector<HTMLButtonElement>(`.packs [data-pack="${pack}"]`);
+      clearTimeout(previewTimer);
       demo.classList.remove('shake'); void demo.offsetWidth; demo.classList.add('shake');
-      if (pack !== 'silent' && img) {
-        reaction.src = pack === 'wizard' ? '/img/reaction-wizard.jpg' : '/img/reaction-grumpyOldMan.jpg';
-        demo.classList.add('react');
-        clearTimeout(hideTimer);
-        hideTimer = window.setTimeout(() => demo.classList.remove('react'), 1300);
-      } else {
-        demo.classList.add('nope-on');
-        clearTimeout(hideTimer);
-        hideTimer = window.setTimeout(() => demo.classList.remove('nope-on'), 1100);
-      }
+      playReaction(1300);
       status.innerHTML = `Blocked <b>${attempts}</b> attempt${attempts === 1 ? '' : 's'}. Click <b>Touch ID to unlock</b> on the screen, or press <kbd>⌘</kbd><kbd>⇧</kbd><kbd>U</kbd>.`;
     };
 
@@ -169,12 +211,14 @@ const packs = [
     // ?demo=warded | wizard | grumpy | silent: open in that state (screenshots, links).
     const q = new URLSearchParams(location.search).get('demo');
     if (q) {
+      hold = true; // a still frame for screenshots: no auto preview, reaction stays up
       set('warded');
       if (q !== 'warded') {
         choosePack(q);
         intrude();
         clearTimeout(hideTimer);
       }
+      hold = false;
     }
 
     for (const b of demo.querySelectorAll<HTMLButtonElement>('.packs button')) {
